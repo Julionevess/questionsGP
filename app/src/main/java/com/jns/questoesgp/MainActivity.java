@@ -5,18 +5,60 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jns.questoesgp.model.Question;
 import com.jns.questoesgp.questoesgp.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
 
 
     public void loadQuestions(){
+        try {
+
+            String jsonString = getJson();
+            Gson gson = new Gson();
+            Type usuariosListType = new TypeToken<ArrayList<Question>>(){}.getType();
+            List<Question> usuariosList = gson.fromJson(jsonString, usuariosListType);
+
+            JSONObject obj = new JSONObject(getJson());
+            JSONArray m_jArry = obj.getJSONArray("formules");
+            ArrayList<HashMap<String, String>> formList = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m_li;
+
+            for (int i = 0; i < m_jArry.length(); i++) {
+                JSONObject jo_inside = m_jArry.getJSONObject(i);
+                Log.d("Details-->", jo_inside.getString("formule"));
+                String formula_value = jo_inside.getString("formule");
+                String url_value = jo_inside.getString("url");
+
+                //Add your values in your `ArrayList` as below:
+                m_li = new HashMap<String, String>();
+                m_li.put("formule", formula_value);
+                m_li.put("url", url_value);
+
+                formList.add(m_li);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
       Question questionOne = new Question();
 
         questionOne.setQuestion("Qual o seu nome?");
@@ -26,6 +68,22 @@ public class MainActivity extends AppCompatActivity {
         questionOne.setOptionThree("André");
         questionOne.setOptionFour("Felipe");
 
+    }
+
+    public String getJson() {
+        String json = null;
+        try {
+            InputStream is = this.getAssets().open("questions.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
 
