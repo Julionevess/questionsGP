@@ -20,45 +20,45 @@
 
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tvQuestion"
             android:layout_width="335dp"
             android:layout_height="105dp"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:text="" />
 
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="191dp">
 
             <RadioButton
-                android:id="@+id/radioButton3"
+                android:id="@+id/rbOptionOne"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="RadioButton" />
+                android:text="" />
 
             <RadioButton
-                android:id="@+id/radioButton4"
+                android:id="@+id/rbOptionTwo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="RadioButton" />
+                android:text="" />
 
             <RadioButton
-                android:id="@+id/radioButton5"
+                android:id="@+id/rbOptionThree"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="RadioButton" />
+                android:text="" />
 
             <RadioButton
-                android:id="@+id/radioButton6"
+                android:id="@+id/rbOptionFour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="RadioButton" />
+                android:text="" />
 
             <RadioButton
-                android:id="@+id/radioButton7"
+                android:id="@+id/rbOptionFive"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="RadioButton" />
+                android:text="" />
         </RadioGroup>
 
         <LinearLayout

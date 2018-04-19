@@ -1,14 +1,15 @@
 package com.jns.questoesgp;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -16,17 +17,16 @@ import com.google.gson.stream.JsonReader;
 import com.jns.questoesgp.model.Answer;
 import com.jns.questoesgp.model.Question;
 import com.jns.questoesgp.questoesgp.R;
+import com.jns.questoesgp.util.SharedPreferenceUtil;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class FirstQuestionActivity extends AppCompatActivity {
 
 
     private static final String CORRECT = "Certo";
@@ -51,16 +51,24 @@ public class MainActivity extends AppCompatActivity {
     public static List<Question> questionsByCategory;
     public static String Category;
 
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
 
+        catchAllQuestions();
+        catchSelectedQuestions();
+
+
+    }
     /*
      * Catch all json questions
      */
-    public static void catchAllQuestions(Context context) {
+    public static void catchAllQuestions() {
         questionsAll = new ArrayList<Question>();
         JsonReader reader;
         try {
-            InputStream inputStream = context.getResources().openRawResource(R.raw.questions);
-            reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"));
+            reader = new JsonReader(new FileReader("C:\\temp\\questions.json"));
             Gson gson = new Gson();
             Type usuariosListType = new TypeToken<ArrayList<Question>>(){}.getType();
             questionsAll = gson.fromJson(reader, usuariosListType);
@@ -115,18 +123,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_firts_question);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        TextView tvQuestion = (TextView) findViewById(R.id.tvQuestion);
+        RadioButton rbOptionOne = (RadioButton) findViewById((R.id.rbOptionOne));
+        RadioButton rbOptionTwo = (RadioButton) findViewById((R.id.rbOptionTwo));
+        RadioButton rbOptionThree = (RadioButton) findViewById((R.id.rbOptionThree));
+        RadioButton rbOptionFour = (RadioButton) findViewById((R.id.rbOptionFour));
+        RadioButton rbOptionFive = (RadioButton) findViewById((R.id.rbOptionFive));
+
+        tvQuestion.setText("Qual o seu nome?");
+        rbOptionOne.setText("");
+        rbOptionTwo.setText("");
+        rbOptionThree.setText("");
+        rbOptionFour.setText("");
+        rbOptionFive.setText("");
+
+        List<Question> questions = SharedPreferenceUtil.getListQuestion(this);
+
+
 
     }
 
