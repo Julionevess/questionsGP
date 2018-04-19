@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         }
       Question questionOne = new Question();
 
-        questionOne.setQuestion("Qual o seu nome?");
+        questionOne.setQduestion("Qual o seu nome?");
         questionOne.setAnswer("José");
         questionOne.setOptionOne("Maria");
         questionOne.setOptionTwo("Joao");
@@ -71,14 +71,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String getJson() {
-        String json = null;
+
+        JsonRea reader;
         try {
-            InputStream is = this.getAssets().open("questions.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
+            reader = new JsonReader(new FileReader("C:\\temp\\questions.json"));
+            System.out.println(reader);
+
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;

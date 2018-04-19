@@ -1,0 +1,75 @@
+﻿<!doctype html>
+<html lang="pt">
+  <head >
+    <!-- Required meta tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<meta charset="ISO-8859-1">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+	
+	<link rel="stylesheet" href="css/grid.css">
+    <title>Games GP</title>
+  </head>
+  <body  onload="load()">
+  
+  <nav class="navbar navbar-expand-lg navbar-primary bg-light">
+	 <ul class="nav bg-light" id="myTab" role="tablist">
+		  <li class="nav-item">
+			<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home"  aria-controls="home" aria-selected="true">Home</a>
+		  </li>
+		</ul>
+  </nav>
+		<div class="tab-content" id="myTabContent">
+		<!-- Home -->
+		  <div class="tab-pane fade show active" id="home" aria-labelledby="home-tab">
+			  <div  class="text-center" >
+				<h5 class="text-uppercase title">Nesta seção você consegue inserir uma nova pergunta 
+					que será adicionada ao APP, siga as instruções no próprio formulário e bom trabalho. </h1>				
+			  </div>
+			</div>		  
+			<div>
+				<form>
+					<div class="form-group bold">
+						<label for="question">Pergunta:</label>
+						<input type="text" class="form-control" id="question" aria-describedby="questionHelp" placeholder="Informe a pergunta">
+						<!--small id="questionlHelp" class="form-text text-muted">Informe a pergunta como deve ser exibida para o usuário</small-->
+					</div>
+					<div class="form-group bold">	
+						<label for="correctAnswer">Resposta Correta:</label>
+						<input type="text" class="form-control" id="correctAnswer" aria-describedby="correctAnswerHelp" placeholder="Informe a resposta correta">
+						<!--small id="correctAnswerHelp" class="form-text text-muted">Informe qual a resposta correta para a pergunta acima</small-->
+					</div>
+					<div class="form-group">	
+						<label for="incorrectOptionOne">Opção incorreta 1:</label>
+						<input type="text" class="form-control" id="incorrectOptionOne" aria-describedby="incorrectOptionOneHelp" placeholder="Informe uma opção incorreta">
+						<!--small id="incorrectOptionOneHelp" class="form-text text-muted">Informe uma opção incorreta para a pergunta acima</small-->
+					</div>
+					<div class="form-group">
+						<label for="incorrectOptionTwo">Opção incorreta 2:</label>
+						<input type="text" class="form-control" id="incorrectOptionTwo" aria-describedby="incorrectOptionOneHelp" placeholder="Informe uma opção incorreta">
+						<!--small id="incorrectOptionTwoHelp" class="form-text text-muted">Informe uma opção incorreta para a pergunta acima</small-->
+					</div>
+					<div class="form-group">
+						<label for="incorrectOptionThree">Opção incorreta 3:</label>
+						<input type="text" class="form-control" id="incorrectOptionThree" aria-describedby="incorrectOptionOneHelp" placeholder="Informe uma opção incorreta">
+						<!--small id="incorrectOptionThreeHelp" class="form-text text-muted">Informe uma opção incorreta para a pergunta acima</small-->
+					</div>
+					<div class="form-group">
+						<label for="incorrectOptionFour">Opção incorreta 4:</label>
+						<input type="text" class="form-control" id="incorrectOptionFour" aria-describedby="incorrectOptionOneHelp" placeholder="Informe uma opção incorreta">
+						<!--small id="incorrectOptionFourHelp" class="form-text text-muted">Informe uma opção incorreta para a pergunta acima</small-->						
+					</div>					
+					<button type="enviar" class="btn btn-primary">Submit</button>
+				</form>
+			</div>
+		</div>
+			
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	<script src="js/grid.js" ></script>
+  </body>
+</html>
