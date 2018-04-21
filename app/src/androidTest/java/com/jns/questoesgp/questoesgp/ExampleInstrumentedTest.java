@@ -8,6 +8,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.jns.questoesgp.model.Question;
+import com.jns.questoesgp.util.SharedPreferenceUtil;
+import com.jns.questoesgp.util.Util;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,12 +32,19 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
 
     public static List<Question> questionsAll;
+    public static List<String> options;
 
     @Test
     public void useAppContext() throws Exception {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
-catchAllQuestions(appContext);
+        catchAllQuestions(appContext);
+
+        SharedPreferenceUtil.setListQuestion(appContext, questionsAll);
+
+        List<Question> listQuestion = SharedPreferenceUtil.getListQuestion(appContext);
+
+        options = Util.unsortedList(listQuestion.get(0));
 
 
         assertEquals("com.jns.questoesgp.questoesgp", appContext.getPackageName());
@@ -56,4 +65,6 @@ catchAllQuestions(appContext);
             ex.printStackTrace();
         }
     }
+
+
 }

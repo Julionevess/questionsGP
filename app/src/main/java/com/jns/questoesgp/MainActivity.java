@@ -1,10 +1,12 @@
 package com.jns.questoesgp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -16,6 +18,7 @@ import com.google.gson.stream.JsonReader;
 import com.jns.questoesgp.model.Answer;
 import com.jns.questoesgp.model.Question;
 import com.jns.questoesgp.questoesgp.R;
+import com.jns.questoesgp.util.SharedPreferenceUtil;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -26,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private static final String CORRECT = "Certo";
@@ -44,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String CATEGORY_STAKEHOLDER = "Partes interessadas";
 
 
+    public static Context context;
+
     public static int totalQuestionSelected = 10;
     public static List<Answer> answers;
     public static List<Question> questionsSelected;
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     /*
      * Catch all json questions
      */
+
     public static void catchAllQuestions(Context context) {
         questionsAll = new ArrayList<Question>();
         JsonReader reader;
@@ -73,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
      * Select questions to play
      */
     public static void catchSelectedQuestions(){
+        catchAllQuestions(context);
         questionsSelected = new ArrayList<Question>();
         Random r = new Random();
         for (int i = 0 ; i < totalQuestionSelected ; i++){
@@ -84,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
      * Select question by category to play
      */
     public static void catchSelectedQuestionsByCategory(String category){
+        catchAllQuestions(context);
         questionsSelected = new ArrayList<Question>();
         Random r = new Random();
         for (int i = 0 ; i < totalQuestionSelected ; i++){
@@ -93,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
                 questionsSelected.add(categorizedQuestion);
             }
         }
+        SharedPreferenceUtil.setListQuestion(context, questionsSelected);
+
     }
 
     /*
@@ -118,17 +128,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        context = this;
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        CardView cardIntegration = (CardView) findViewById(R.id.cardIntegration);
+        CardView cardScope = (CardView) findViewById(R.id.cardScope);
+
+        cardIntegration.setOnClickListener(this);
+        cardScope.setOnClickListener(this);
 
     }
+
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.cardIntegration) {
+            catchSelectedQuestionsByCategory(CATEGORY_INTEGRATION);
+        } else if (v.getId() == R.id.cardScope) {
+            catchSelectedQuestionsByCategory(CATEGORY_SCOPE);
+        }
+
+        SharedPreferenceUtil.getListQuestion(context);
+        startActivity(new Intent(context, FirstQuestionActivity.class));
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

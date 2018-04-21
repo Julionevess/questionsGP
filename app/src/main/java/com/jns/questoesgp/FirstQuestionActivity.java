@@ -1,5 +1,6 @@
 package com.jns.questoesgp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,107 +19,26 @@ import com.jns.questoesgp.model.Answer;
 import com.jns.questoesgp.model.Question;
 import com.jns.questoesgp.questoesgp.R;
 import com.jns.questoesgp.util.SharedPreferenceUtil;
+import com.jns.questoesgp.util.Util;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class FirstQuestionActivity extends AppCompatActivity {
+import static com.jns.questoesgp.MainActivity.context;
 
+public class FirstQuestionActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private static final String CORRECT = "Certo";
-    private static final String WRONG = "Errado";
-
-    private static final String CATEGORY_INTEGRATION = "Integração";
-    private static final String CATEGORY_SCOPE = "Escopo";
-    private static final String CATEGORY_COSTE = "Custo";
-    private static final String CATEGORY_QUALITY = "Qualidade";
-    private static final String CATEGORY_ACQUISITION = "Aquisição";
-    private static final String CATEGORY_RESOURCE = "Recurso";
-    private static final String CATEGORY_COMMUNICATION = "Comunicação";
-    private static final String CATEGORY_RISK = "Risco";
-    private static final String CATEGORY_SCHEDULE = "Cronograma";
-    private static final String CATEGORY_STAKEHOLDER = "Partes interessadas";
-
-
-    public static int totalQuestionSelected = 10;
     public static List<Answer> answers;
-    public static List<Question> questionsSelected;
-    public static List<Question> questionsAll;
-    public static List<Question> questionsByCategory;
-    public static String Category;
+    public static List<Question> questions;
+    public static List<String> options;
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-
-        catchAllQuestions();
-        catchSelectedQuestions();
-
-
-    }
-    /*
-     * Catch all json questions
-     */
-    public static void catchAllQuestions() {
-        questionsAll = new ArrayList<Question>();
-        JsonReader reader;
-        try {
-            reader = new JsonReader(new FileReader("C:\\temp\\questions.json"));
-            Gson gson = new Gson();
-            Type usuariosListType = new TypeToken<ArrayList<Question>>(){}.getType();
-            questionsAll = gson.fromJson(reader, usuariosListType);
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-    /*
-     * Select questions to play
-     */
-    public static void catchSelectedQuestions(){
-        questionsSelected = new ArrayList<Question>();
-        Random r = new Random();
-        for (int i = 0 ; i < totalQuestionSelected ; i++){
-            questionsSelected.add(questionsAll.get(r.nextInt(totalQuestionSelected)));
-        }
-    }
-
-    /*
-     * Select question by category to play
-     */
-    public static void catchSelectedQuestionsByCategory(String category){
-        questionsSelected = new ArrayList<Question>();
-        Random r = new Random();
-        for (int i = 0 ; i < totalQuestionSelected ; i++){
-
-            Question categorizedQuestion = questionsAll.get(r.nextInt(totalQuestionSelected));
-            if (categorizedQuestion.getCategory().equals(category)){
-                questionsSelected.add(categorizedQuestion);
-            }
-        }
-    }
-
-    /*
-     * Correct Questions
-     */
-    public static void correctQuestions(){
-
-        for (int i = 0; i < questionsSelected.size() ; i++) {
-            if (questionsSelected.get(i).getAnswer().equals(answers.get(i).getAnswer())){
-                answers.get(i).setSituation(CORRECT);
-            }else{
-                answers.get(i).setSituation(WRONG);
-            }
-        }
-
-    }
-
-
+    public static Context context;
+    public static Question questionOne;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +46,16 @@ public class FirstQuestionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_firts_question);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        context = this;
+
+        questions = SharedPreferenceUtil.getListQuestion(context);
+        if (questions.size() > 0) {
+            questionOne = questions.get(0);
+            answers = SharedPreferenceUtil.getListAnswers(context);
+        }
+
+
+        options = Util.unsortedList(questionOne);
 
         TextView tvQuestion = (TextView) findViewById(R.id.tvQuestion);
         RadioButton rbOptionOne = (RadioButton) findViewById((R.id.rbOptionOne));
@@ -134,12 +64,12 @@ public class FirstQuestionActivity extends AppCompatActivity {
         RadioButton rbOptionFour = (RadioButton) findViewById((R.id.rbOptionFour));
         RadioButton rbOptionFive = (RadioButton) findViewById((R.id.rbOptionFive));
 
-        tvQuestion.setText("Qual o seu nome?");
-        rbOptionOne.setText("");
-        rbOptionTwo.setText("");
-        rbOptionThree.setText("");
-        rbOptionFour.setText("");
-        rbOptionFive.setText("");
+        tvQuestion.setText(questionOne.getQuestion());
+        rbOptionOne.setText(options.get(0));
+        rbOptionTwo.setText(options.get(1));
+        rbOptionThree.setText(options.get(2));
+        rbOptionFour.setText(options.get(3));
+        rbOptionFive.setText(options.get(4));
 
         List<Question> questions = SharedPreferenceUtil.getListQuestion(this);
 
@@ -167,5 +97,10 @@ public class FirstQuestionActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }
