@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.jns.questoesgp.model.Answer;
@@ -30,7 +31,14 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
     public static int currentPage;
     private Button btnNext;
     private Button btnBack;
+    private RadioButton rbOptionOne;
+    private RadioButton rbOptionTwo;
+    private RadioButton rbOptionThree;
+    private RadioButton rbOptionFour;
+    private RadioButton rbOptionFive;
+    private RadioGroup rgOptions;
     public static final String CURRENT_PAGE = "currentPage";
+    public Answer answer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,20 +49,33 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
 
         init();
 
-        questions = SharedPreferenceUtil.getListQuestion(context);
-        if (questions.size() > 0) {
-            questionSelected = questions.get(0);
-            answers = SharedPreferenceUtil.getListAnswers(context);
-        }
+        TextView tvQuestion = (TextView) findViewById(R.id.tvQuestion);
+        rbOptionOne = (RadioButton) findViewById((R.id.rbOptionOne));
+        rbOptionTwo = (RadioButton) findViewById((R.id.rbOptionTwo));
+        rbOptionThree = (RadioButton) findViewById((R.id.rbOptionThree));
+        rbOptionFour = (RadioButton) findViewById((R.id.rbOptionFour));
+        rbOptionFive = (RadioButton) findViewById((R.id.rbOptionFive));
+
+        rgOptions = (RadioGroup) findViewById(R.id.rgOptions);
+
+        rgOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == rbOptionOne.getId()){
+                    answer.setAnswer(rbOptionOne.getText().toString());
+                }else if (checkedId == rbOptionTwo.getId()){
+                    answer.setAnswer(rbOptionTwo.getText().toString());
+                }else if (checkedId == rbOptionThree.getId()){
+                    answer.setAnswer(rbOptionThree.getText().toString());
+                }else if (checkedId == rbOptionFour.getId()){
+                    answer.setAnswer(rbOptionFour.getText().toString());
+                }else if (checkedId == rbOptionFive.getId()){
+                    answer.setAnswer(rbOptionFive.getText().toString());
+                }
+            }
+        });
 
         options = Util.unsortedList(questionSelected);
-
-        TextView tvQuestion = (TextView) findViewById(R.id.tvQuestion);
-        RadioButton rbOptionOne = (RadioButton) findViewById((R.id.rbOptionOne));
-        RadioButton rbOptionTwo = (RadioButton) findViewById((R.id.rbOptionTwo));
-        RadioButton rbOptionThree = (RadioButton) findViewById((R.id.rbOptionThree));
-        RadioButton rbOptionFour = (RadioButton) findViewById((R.id.rbOptionFour));
-        RadioButton rbOptionFive = (RadioButton) findViewById((R.id.rbOptionFive));
 
         tvQuestion.setText(questionSelected.getQuestion());
         rbOptionOne.setText(options.get(0));
@@ -66,6 +87,9 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
         btnNext = (Button) findViewById(R.id.btnNext);
         btnBack = (Button) findViewById(R.id.btnBack);
 
+        btnNext.setOnClickListener(this);
+        btnBack.setOnClickListener(this);
+
     }
 
     private void init() {
@@ -76,6 +100,13 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
             currentPage = b.getInt(CURRENT_PAGE);
             currentPage++;
         }
+        questions = SharedPreferenceUtil.getListQuestion(context);
+        if (questions.size() > 0) {
+            questionSelected = questions.get(0);
+            answers = SharedPreferenceUtil.getListAnswers(context);
+        }
+        answer = new Answer();
+        answer.setQuestion(questions.get(currentPage).getQuestion());
     }
 
     @Override
@@ -102,9 +133,13 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == btnNext.getId()) {
-
-            Intent intent = new Intent(context, QuestionActivity.class);
+            if (v.getId() == btnNext.getId()) { if (answers.size() > currentPage) {
+                answers.add(currentPage, answer);
+            }else{
+                answers.add(answer);
+            }
+            SharedPreferenceUtil.setListAnswer(context, answers);
+            Intent intent = new Intent(context, LastQuestionActivity.class);
             Bundle b = new Bundle();
 
             b.putInt(CURRENT_PAGE, currentPage);
@@ -113,7 +148,7 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
             finish();
             startActivity(intent);
         }else if (v.getId() == btnBack.getId()){
-
+            super.onBackPressed();
         }
     }
 }

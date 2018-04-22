@@ -20,6 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.jns.questoesgp.FirstQuestionActivity"/>
+        <activity android:name="com.jns.questoesgp.QuestionActivity"/>
+        <activity android:name="com.jns.questoesgp.LastQuestionActivity"/>
     </application>
 
 </manifest>

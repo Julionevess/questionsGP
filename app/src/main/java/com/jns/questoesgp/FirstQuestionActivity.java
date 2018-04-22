@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -35,14 +36,21 @@ import static com.jns.questoesgp.MainActivity.context;
 
 public class FirstQuestionActivity extends AppCompatActivity implements View.OnClickListener{
 
-    public static List<Answer> answers;
-    public static List<Question> questions;
-    public static int currentPage;
-    public static Context context;
-    public static Question questionOne;
-    public static List<String> options;
-
+    public List<Answer> answers;
+    public List<Question> questions;
+    public int currentPage;
+    public Context context;
+    public Question questionOne;
+    public List<String> options;
+    private RadioButton rbOptionOne;
+    private RadioButton rbOptionTwo;
+    private RadioButton rbOptionThree;
+    private RadioButton rbOptionFour;
+    private RadioButton rbOptionFive;
+    private RadioGroup rgOptions;
+    TextView tvQuestion;
     public static final String CURRENT_PAGE = "currentPage";
+    Answer answer;
 
     private Button btnNext;
 
@@ -55,24 +63,38 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
 
         init();
 
-        questions = SharedPreferenceUtil.getListQuestion(context);
-        if (questions.size() > 0) {
-            questionOne = questions.get(0);
-            answers = SharedPreferenceUtil.getListAnswers(context);
-        }
+        tvQuestion = (TextView) findViewById(R.id.tvQuestion);
+        rbOptionOne = (RadioButton) findViewById((R.id.rbOptionOne));
+        rbOptionTwo = (RadioButton) findViewById((R.id.rbOptionTwo));
+        rbOptionThree = (RadioButton) findViewById((R.id.rbOptionThree));
+        rbOptionFour = (RadioButton) findViewById((R.id.rbOptionFour));
+        rbOptionFive = (RadioButton) findViewById((R.id.rbOptionFive));
 
-        options = Util.unsortedList(questionOne);
+        rgOptions = (RadioGroup) findViewById(R.id.rgOptions);
 
-        TextView tvQuestion = (TextView) findViewById(R.id.tvQuestion);
-        RadioButton rbOptionOne = (RadioButton) findViewById((R.id.rbOptionOne));
-        RadioButton rbOptionTwo = (RadioButton) findViewById((R.id.rbOptionTwo));
-        RadioButton rbOptionThree = (RadioButton) findViewById((R.id.rbOptionThree));
-        RadioButton rbOptionFour = (RadioButton) findViewById((R.id.rbOptionFour));
-        RadioButton rbOptionFive = (RadioButton) findViewById((R.id.rbOptionFive));
+        rgOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == rbOptionOne.getId()){
+                    answer.setAnswer(rbOptionOne.getText().toString());
+                }else if (checkedId == rbOptionTwo.getId()){
+                    answer.setAnswer(rbOptionTwo.getText().toString());
+                }else if (checkedId == rbOptionThree.getId()){
+                    answer.setAnswer(rbOptionThree.getText().toString());
+                }else if (checkedId == rbOptionFour.getId()){
+                    answer.setAnswer(rbOptionFour.getText().toString());
+                }else if (checkedId == rbOptionFive.getId()){
+                    answer.setAnswer(rbOptionFive.getText().toString());
+                }
+            }
+        });
 
         btnNext = (Button) findViewById(R.id.btnNext);
+        btnNext.setOnClickListener(this);
 
+        options = Util.unsortedList(questionOne);
         tvQuestion.setText(questionOne.getQuestion());
+        tvQuestion.setText("999999999999999");
         rbOptionOne.setText(options.get(0));
         rbOptionTwo.setText(options.get(1));
         rbOptionThree.setText(options.get(2));
@@ -84,6 +106,13 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
     private void init() {
         context = this;
         currentPage = 1;
+        questions = SharedPreferenceUtil.getListQuestion(context);
+        if (questions.size() > 0) {
+            questionOne = questions.get(0);
+            answers = new ArrayList<Answer>();
+        }
+        answer = new Answer();
+        answer.setQuestion(questions.get(currentPage).getQuestion());
     }
 
     @Override
@@ -112,7 +141,11 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
 
         if (v.getId() == (btnNext.getId())) {
-
+            if (answers.size() > currentPage) {
+                answers.add(currentPage, answer);
+            }else{
+                answers.add(answer);
+            }
             SharedPreferenceUtil.setListAnswer(context, answers);
 
             Intent intent = new Intent(context, QuestionActivity.class);

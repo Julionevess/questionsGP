@@ -21,12 +21,12 @@
 
         <TextView
             android:id="@+id/tvQuestion"
-            android:layout_width="335dp"
-            android:layout_height="105dp"
-            android:layout_weight="1"
-            android:text="" />
+            android:layout_width="wrap_content"
+            android:layout_height="180dp"
+            android:text="asd" />
 
         <RadioGroup
+            android:id="@+id/rgOptions"
             android:layout_width="match_parent"
             android:layout_height="191dp">
 
