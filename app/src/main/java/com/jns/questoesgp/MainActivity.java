@@ -32,8 +32,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private static final String CORRECT = "Certo";
-    private static final String WRONG = "Errado";
+
 
     private static final String CATEGORY_INTEGRATION = "Integração";
     private static final String CATEGORY_SCOPE = "Escopo";
@@ -104,23 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferenceUtil.setListQuestion(context, questionsSelected);
 
     }
-
-    /*
-     * Correct Questions
-     */
-    public static void correctQuestions(){
-
-        for (int i = 0; i < questionsSelected.size() ; i++) {
-            if (questionsSelected.get(i).getAnswer().equals(answers.get(i).getAnswer())){
-                answers.get(i).setSituation(CORRECT);
-            }else{
-                answers.get(i).setSituation(WRONG);
-            }
-        }
-
-    }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

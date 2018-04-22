@@ -1,10 +1,7 @@
 package com.jns.questoesgp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -14,54 +11,63 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 import com.jns.questoesgp.model.Answer;
 import com.jns.questoesgp.model.Question;
 import com.jns.questoesgp.questoesgp.R;
 import com.jns.questoesgp.util.SharedPreferenceUtil;
 import com.jns.questoesgp.util.Util;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
-import static com.jns.questoesgp.MainActivity.context;
+public class LastQuestionActivity extends AppCompatActivity implements View.OnClickListener{
 
-public class FirstQuestionActivity extends AppCompatActivity implements View.OnClickListener{
+    public static final String CURRENT_PAGE = "currentPage";
+    private static final String CORRECT = "Certo";
+    private static final String WRONG = "Errado";
 
     public static List<Answer> answers;
     public static List<Question> questions;
-    public static int currentPage;
-    public static Context context;
-    public static Question questionOne;
     public static List<String> options;
+    public static Context context;
+    public static Question questionSelected;
+    public static int currentPage;
 
-    public static final String CURRENT_PAGE = "currentPage";
+    Button btnCorrect;
 
-    private Button btnNext;
+    /*
+     * Correct Questions
+     */
+    public static void correctQuestions(){
+
+        for (int i = 0; i < questions.size() ; i++) {
+            if (questions.get(i).getAnswer().equals(answers.get(i).getAnswer())){
+                answers.get(i).setSituation(CORRECT);
+            }else{
+                answers.get(i).setSituation(WRONG);
+            }
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_question);
+        setContentView(R.layout.activity_firts_question);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         init();
 
+
+
         questions = SharedPreferenceUtil.getListQuestion(context);
         if (questions.size() > 0) {
-            questionOne = questions.get(0);
+            questionSelected = questions.get(0);
             answers = SharedPreferenceUtil.getListAnswers(context);
         }
 
-        options = Util.unsortedList(questionOne);
+
+        options = Util.unsortedList(questionSelected);
 
         TextView tvQuestion = (TextView) findViewById(R.id.tvQuestion);
         RadioButton rbOptionOne = (RadioButton) findViewById((R.id.rbOptionOne));
@@ -70,20 +76,26 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
         RadioButton rbOptionFour = (RadioButton) findViewById((R.id.rbOptionFour));
         RadioButton rbOptionFive = (RadioButton) findViewById((R.id.rbOptionFive));
 
-        btnNext = (Button) findViewById(R.id.btnNext);
-
-        tvQuestion.setText(questionOne.getQuestion());
+        tvQuestion.setText(questionSelected.getQuestion());
         rbOptionOne.setText(options.get(0));
         rbOptionTwo.setText(options.get(1));
         rbOptionThree.setText(options.get(2));
         rbOptionFour.setText(options.get(3));
         rbOptionFive.setText(options.get(4));
 
+        btnCorrect = (Button) findViewById(R.id.btnNext);
+
+
     }
 
     private void init() {
         context = this;
-        currentPage = 1;
+        Bundle b = getIntent().getExtras();
+        currentPage = -1;
+        if(b != null) {
+            currentPage = b.getInt(CURRENT_PAGE);
+            currentPage++;
+        }
     }
 
     @Override
@@ -111,18 +123,8 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
 
-        if (v.getId() == (btnNext.getId())) {
-
-            SharedPreferenceUtil.setListAnswer(context, answers);
-
-            Intent intent = new Intent(context, QuestionActivity.class);
-            Bundle b = new Bundle();
-            b.putInt(CURRENT_PAGE, currentPage);
-            intent.putExtras(b);
-            startActivity(intent);
-            finish();
-            startActivity(intent);
+        if (v.equals(btnCorrect)){
+            correctQuestions();
         }
-
     }
 }
