@@ -1,6 +1,8 @@
 package com.jns.questoesgp.adapter;
 
 import android.app.Activity;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerViewHolders> {
 
     private Activity activity;
     private List<Answer> items;
+    private RoundedBitmapDrawable circularBitmapDrawable;
 
     public AnswerAdapter(Activity activity) {
         this.activity = activity;
@@ -53,6 +56,17 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerViewHolders> {
             holder.question.setVisibility(View.GONE);
         }
 
+        if (holderItem.correctAnswer()) {
+            holder.ivAnswer.setImageResource(R.mipmap.check);
+            holder.ivAnswer.setVisibility(View.VISIBLE);
+            holder.llCorrectAnswer.setVisibility(View.GONE);
+        } else {
+            holder.ivAnswer.setImageResource(R.mipmap.error);
+            holder.ivAnswer.setVisibility(View.VISIBLE);
+            holder.ivCorrect_Answer.setImageResource(R.mipmap.check);
+            holder.ivCorrect_Answer.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
@@ -67,6 +81,4 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerViewHolders> {
     public void setItems(List<Answer> items) {
         this.items = items;
     }
-
-
 }

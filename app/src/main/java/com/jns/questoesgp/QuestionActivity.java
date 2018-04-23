@@ -102,7 +102,7 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
         }
         questions = SharedPreferenceUtil.getListQuestion(context);
         if (questions.size() > 0) {
-            questionSelected = questions.get(0);
+            questionSelected = questions.get(currentPage);
             answers = SharedPreferenceUtil.getListAnswers(context);
         }
         answer = new Answer();
