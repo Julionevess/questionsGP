@@ -1,69 +1,101 @@
 package com.jns.questoesgp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
+import com.jns.questoesgp.adapter.AnswerAdapter;
 import com.jns.questoesgp.model.Answer;
 import com.jns.questoesgp.model.Question;
 import com.jns.questoesgp.questoesgp.R;
 import com.jns.questoesgp.util.SharedPreferenceUtil;
 import com.jns.questoesgp.util.Util;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
-import static com.jns.questoesgp.MainActivity.context;
+public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
 
-public class FirstQuestionActivity extends AppCompatActivity implements View.OnClickListener{
 
-    public List<Answer> answers;
-    public List<Question> questions;
-    public int currentPage;
-    public Context context;
-    public Question questionOne;
-    public List<String> options;
-    private RadioButton rbOptionOne;
-    private RadioButton rbOptionTwo;
-    private RadioButton rbOptionThree;
-    private RadioButton rbOptionFour;
-    private RadioButton rbOptionFive;
-    private RadioGroup rgOptions;
-    TextView tvQuestion;
+    private AnswerAdapter adapter;
+
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private View rootView;
+
+
     public static final String CURRENT_PAGE = "currentPage";
-    Answer answer;
+    private static final String CORRECT = "Certo";
+    private static final String WRONG = "Errado";
 
-    private Button btnNext;
+    public static List<Answer> answers;
+    public static List<Question> questions;
+    public static Context context;
+    public static int currentPage;
+    public Answer answer;
+
+    /*
+     * Correct Questions
+     */
+    public static void correctQuestions(){
+
+        for (int i = 0; i < questions.size() ; i++) {
+            if (questions.get(i).getAnswer().equals(answers.get(i).getAnswer())){
+                answers.get(i).setSituation(CORRECT);
+            }else{
+                answers.get(i).setSituation(WRONG);
+            }
+        }
+
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_firts_question);
+        setContentView(R.layout.activity_answer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         init();
 
-        tvQuestion = (TextView) findViewById(R.id.tvQuestion);
+        adapter = new AnswerAdapter(this);
+        adapter.setItems(answers);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.swapAdapter(adapter, true);
+
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent),
+                ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setRefreshing(true);
+
+
+
+
+        /*
+        TextView tvQuestion = (TextView) findViewById(R.id.tvQuestion);
         rbOptionOne = (RadioButton) findViewById((R.id.rbOptionOne));
         rbOptionTwo = (RadioButton) findViewById((R.id.rbOptionTwo));
         rbOptionThree = (RadioButton) findViewById((R.id.rbOptionThree));
@@ -89,30 +121,33 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
             }
         });
 
-        btnNext = (Button) findViewById(R.id.btnNext);
-        btnNext.setOnClickListener(this);
-
-        options = Util.unsortedList(questionOne);
-        tvQuestion.setText(questionOne.getQuestion());
+        options = Util.unsortedList(questionSelected);
+        tvQuestion.setText(questionSelected.getQuestion());
         rbOptionOne.setText(options.get(0));
         rbOptionTwo.setText(options.get(1));
         rbOptionThree.setText(options.get(2));
         rbOptionFour.setText(options.get(3));
         rbOptionFive.setText(options.get(4));
 
+        btnCorrect = (Button) findViewById(R.id.btnNext);
+        btnBack = (Button) findViewById(R.id.btnBack);
+
+        btnCorrect = (Button) findViewById(R.id.btnNext);
+
+*/
     }
 
     private void init() {
+
         context = this;
-        currentPage = 1;
-        questions = SharedPreferenceUtil.getListQuestion(context);
-        if (questions.size() > 0) {
-            questionOne = questions.get(0);
-            answers = new ArrayList<Answer>();
+        Bundle b = getIntent().getExtras();
+        currentPage = -1;
+        if(b != null) {
+            currentPage = b.getInt(CURRENT_PAGE);
+            currentPage++;
         }
-        answer = new Answer();
-        answer.setQuestion(questions.get(currentPage).getQuestion());
-        answer.setCorrectAnswer(questions.get(currentPage).getAnswer());
+        answers = SharedPreferenceUtil.getListAnswers(context);
+
     }
 
     @Override
@@ -137,25 +172,10 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
-    public void onClick(View v) {
-
-        if (v.getId() == (btnNext.getId())) {
-            if (answers.size() > currentPage) {
-                answers.add(currentPage, answer);
-            }else{
-                answers.add(answer);
-            }
-            SharedPreferenceUtil.setListAnswer(context, answers);
-
-            Intent intent = new Intent(context, QuestionActivity.class);
-            Bundle b = new Bundle();
-            b.putInt(CURRENT_PAGE, currentPage);
-            intent.putExtras(b);
-            startActivity(intent);
-            finish();
-            startActivity(intent);
-        }
-
+    public void onRefresh() {
+        //TODO implementar
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

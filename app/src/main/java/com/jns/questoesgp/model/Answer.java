@@ -4,6 +4,7 @@ public class Answer {
 	
 	private String question;
 	private String answer;
+	private String correctAnswer;
 	private String situation;
 
 	public String getQuestion() {
@@ -30,4 +31,19 @@ public class Answer {
 		this.situation = situation;
 	}
 
+	public void setCorrectAnswer(String correctAnswer) {
+		this.correctAnswer = correctAnswer;
+	}
+
+	public String getCorrectAnswer() {
+		return correctAnswer;
+	}
+
+	public Boolean correctAnswer(){
+
+		if (this.answer.equals(correctAnswer)){
+			return true;
+		}
+		return false;
+	}
 }

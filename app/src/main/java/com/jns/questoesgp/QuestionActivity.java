@@ -43,7 +43,7 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_firts_question);
+        setContentView(R.layout.activity_question);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -107,6 +107,7 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
         }
         answer = new Answer();
         answer.setQuestion(questions.get(currentPage).getQuestion());
+        answer.setCorrectAnswer(questions.get(currentPage).getAnswer());
     }
 
     @Override

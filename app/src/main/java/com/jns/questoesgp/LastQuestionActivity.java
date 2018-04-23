@@ -1,6 +1,7 @@
 package com.jns.questoesgp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -101,9 +102,9 @@ public class LastQuestionActivity extends AppCompatActivity implements View.OnCl
         rbOptionFive.setText(options.get(4));
 
         btnCorrect = (Button) findViewById(R.id.btnNext);
+        btnCorrect.setOnClickListener(this);
         btnBack = (Button) findViewById(R.id.btnBack);
 
-        btnCorrect = (Button) findViewById(R.id.btnNext);
 
 
     }
@@ -123,6 +124,7 @@ public class LastQuestionActivity extends AppCompatActivity implements View.OnCl
         }
         answer = new Answer();
         answer.setQuestion(questions.get(currentPage).getQuestion());
+        answer.setCorrectAnswer(questions.get(currentPage).getAnswer());
     }
 
     @Override
@@ -155,7 +157,18 @@ public class LastQuestionActivity extends AppCompatActivity implements View.OnCl
             }else{
                 answers.add(answer);
             }
-            correctQuestions();
+//            correctQuestions();
+
+            SharedPreferenceUtil.setListAnswer(context, answers);
+
+            Intent intent = new Intent(context, AnswerActivity.class);
+            Bundle b = new Bundle();
+            b.putInt(CURRENT_PAGE, currentPage);
+            intent.putExtras(b);
+            startActivity(intent);
+            finish();
+            startActivity(intent);
+
         }else if (v.getId() == btnBack.getId()){
         super.onBackPressed();
     }

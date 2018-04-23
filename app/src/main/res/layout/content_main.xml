@@ -14,7 +14,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="50dp"
         android:orientation="vertical"
         android:padding="12dp">
 
@@ -22,13 +22,15 @@
         <TextView
             android:id="@+id/tvQuestion"
             android:layout_width="wrap_content"
-            android:layout_height="180dp"
-            android:text="asd" />
+            android:layout_height="wrap_content"
+            android:text="" />
 
         <RadioGroup
             android:id="@+id/rgOptions"
             android:layout_width="match_parent"
-            android:layout_height="191dp">
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp">
 
             <RadioButton
                 android:id="@+id/rbOptionOne"
@@ -64,10 +66,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:layout_gravity="right"
-            android:layout_marginRight="6dp"
+            android:gravity="right"
             android:orientation="horizontal">
 
             <Button
@@ -75,13 +75,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
+                android:theme="@style/SecoundFlatButton"
                 android:text="Anterior" />
 
-            <Button
+
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btnNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
+                android:theme="@style/PrimaryFlatButton"
                 android:text="Próximo" />
         </LinearLayout>
 
