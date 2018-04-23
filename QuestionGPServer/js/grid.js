@@ -77,7 +77,7 @@ $(function() {
 });
 
 function init(){
-
+/*
 	var txt = '';
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function(){
@@ -86,7 +86,7 @@ function init(){
 	  }
 	};
 	xmlhttp.open("GET","abc.txt",true);
-	alert(xmlhttp.val);
+	//alert(xmlhttp.val);
 	xmlhttp.send();
 
 /*

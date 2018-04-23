@@ -15,64 +15,98 @@
 	<div class="container">
 		
 		<nav class="navbar navbar-expand-lg navbar-primary bg-light">
-			<ul class="nav bg-light" id="myTab" role="tablist">
+			<ul class="nav nav-tabs bg-light" id="tabQuestion" role="divQuestion">
 				<li class="nav-item">
-					<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home"  aria-controls="home" aria-selected="true">Home</a>
+					<a class="nav-link active" id="question-tab" data-toggle="tab" href="#question"  aria-controls="question" aria-selected="true">Inserir Questões</a>
+				</li>			
+				<li class="nav-item">
+					<a class="nav-link" id="list-tab" data-toggle="tab" href="#list"  aria-controls="list" aria-selected="true">Listar Questões</a>
 				</li>
 			</ul>
 		</nav>
 		<div class="tab-content" id="myTabContent">
 			<!-- Home -->
-			<div class="tab-pane fade show active" id="home" aria-labelledby="home-tab">
+			<div class="tab-pane fade show active" id="question" aria-labelledby="home-tab">
 				<div  class="text-center" >
-					<h5 class="title">Nesta seção você consegue inserir uma nova pergunta 
-						que será adicionada ao APP, siga as instruções no próprio formulário e bom trabalho. </h1>				
-					</div>
+					<h5 class="title">Nesta página é possível inserir uma nova pergunta 
+						que será adicionada ao APP EGP, siga as instruções no próprio formulário e bom trabalho.</h5>				
 				</div>
 				<div id="alert" class="invisible" role="alert">
 					<strong>Atenção!</strong> Todos os campos do formulários são obrigatórios.
-					<!--button type="button" class="close" data-dismiss="alert" aria-label="Close"-->					
-				</button>
-			</div>		  
-			<div>
-				<form id="formQuestion">
-					<div class="form-group bold">
-						<label for="question">Pergunta:</label>
-						<input type="text" class="form-control" id="question" aria-describedby="questionHelp" placeholder="Informe a pergunta">
-						<!--small id="questionlHelp" class="form-text text-muted">Informe a pergunta como deve ser exibida para o usuário</small-->
-					</div>
-					<div class="form-group bold">	
-						<label for="correctAnswer">Resposta Correta:</label>
-						<input type="text" class="form-control" id="correctAnswer" aria-describedby="correctAnswerHelp" placeholder="Informe a resposta correta">
-						<!--small id="correctAnswerHelp" class="form-text text-muted">Informe qual a resposta correta para a pergunta acima</small-->
-					</div>
-					<div class="form-group">	
-						<label for="incorrectOptionOne">Opção incorreta 1:</label>
-						<input type="text" class="form-control" id="incorrectOptionOne" aria-describedby="incorrectOptionOneHelp" placeholder="Informe uma opção incorreta">
-						<!--small id="incorrectOptionOneHelp" class="form-text text-muted">Informe uma opção incorreta para a pergunta acima</small-->
-					</div>
-					<div class="form-group">
-						<label for="incorrectOptionTwo">Opção incorreta 2:</label>
-						<input type="text" class="form-control" id="incorrectOptionTwo" aria-describedby="incorrectOptionOneHelp" placeholder="Informe uma opção incorreta">
-						<!--small id="incorrectOptionTwoHelp" class="form-text text-muted">Informe uma opção incorreta para a pergunta acima</small-->
-					</div>
-					<div class="form-group">
-						<label for="incorrectOptionThree">Opção incorreta 3:</label>
-						<input type="text" class="form-control" id="incorrectOptionThree" aria-describedby="incorrectOptionOneHelp" placeholder="Informe uma opção incorreta">
-						<!--small id="incorrectOptionThreeHelp" class="form-text text-muted">Informe uma opção incorreta para a pergunta acima</small-->
-					</div>
-					<div class="form-group">
-						<label for="incorrectOptionFour">Opção incorreta 4:</label>
-						<input type="text" class="form-control" id="incorrectOptionFour" aria-describedby="incorrectOptionOneHelp" placeholder="Informe uma opção incorreta">
-						<!--small id="incorrectOptionFourHelp" class="form-text text-muted">Informe uma opção incorreta para a pergunta acima</small-->						
-					</div>					
-					<button type="button" onclick="sendForm()" class="btn btn-primary">Submit</button>
-				</form>
-			</div>
+					<!--button type="button" class="close" data-dismiss="alert" aria-label="Close">					
+				</button-->
+				</div>
+				<div>	
+					<form id="formQuestion">
+						<div class="form-group bold">
+							<label for="question">Pergunta:</label>
+							<input type="text" class="form-control" id="question" aria-describedby="questionHelp" placeholder="Informe a pergunta">
+							<!--small id="questionlHelp" class="form-text text-muted">Informe a pergunta como deve ser exibida para o usuário</small-->
+						</div>
+						<div class="form-group bold">	
+							<label for="correctAnswer">Resposta Correta:</label>
+							<input type="text" class="form-control" id="correctAnswer" aria-describedby="correctAnswerHelp" placeholder="Informe a resposta correta">
+							<!--small id="correctAnswerHelp" class="form-text text-muted">Informe qual a resposta correta para a pergunta acima</small-->
+						</div>
+						<div class="form-group">	
+							<label for="incorrectOptionOne">Opção incorreta 1:</label>
+							<input type="text" class="form-control" id="incorrectOptionOne" aria-describedby="incorrectOptionOneHelp" placeholder="Informe uma opção incorreta">
+							<!--small id="incorrectOptionOneHelp" class="form-text text-muted">Informe uma opção incorreta para a pergunta acima</small-->
+						</div>
+						<div class="form-group">
+							<label for="incorrectOptionTwo">Opção incorreta 2:</label>
+							<input type="text" class="form-control" id="incorrectOptionTwo" aria-describedby="incorrectOptionOneHelp" placeholder="Informe uma opção incorreta">
+							<!--small id="incorrectOptionTwoHelp" class="form-text text-muted">Informe uma opção incorreta para a pergunta acima</small-->
+						</div>
+						<div class="form-group">
+							<label for="incorrectOptionThree">Opção incorreta 3:</label>
+							<input type="text" class="form-control" id="incorrectOptionThree" aria-describedby="incorrectOptionOneHelp" placeholder="Informe uma opção incorreta">
+							<!--small id="incorrectOptionThreeHelp" class="form-text text-muted">Informe uma opção incorreta para a pergunta acima</small-->
+						</div>
+						<div class="form-group">
+							<label for="incorrectOptionFour">Opção incorreta 4:</label>
+							<input type="text" class="form-control" id="incorrectOptionFour" aria-describedby="incorrectOptionOneHelp" placeholder="Informe uma opção incorreta">
+							<!--small id="incorrectOptionFourHelp" class="form-text text-muted">Informe uma opção incorreta para a pergunta acima</small-->						
+						</div>					
+						<button type="button" onclick="sendForm()" class="btn btn-primary">Submit</button>
+					</form>
+				</div>
+			</div>	
+			<div class="tab-pane fade show" id="list" aria-labelledby="home-tab">
+				<div  class="text-center" >
+					<h5 class="title">Questões cadastradas </h5>				
+				</div>
+				<div id="alert" class="invisible" role="alert">
+					<strong>Atenção!</strong> Todos os campos do formulários são obrigatórios.
+					<!--button type="button" class="close" data-dismiss="alert" aria-label="Close">					
+				</button-->
+				</div>
+				<div class="tab-content" id="myTabContent">
+					<div class="container">				
+						<p>Abaixo estão listadas as questões cadastradas, para visualizar a resposta de cada questão basta clicar na questão desejada</p>            
+						<table class="table table-striped">
+						  <thead>
+							<tr>
+							  <th>Pergunta</th>					  
+							</tr>
+						  </thead>
+						  <tbody>
+							<tr>
+							  <td>Qual o seu nome?</td>					  
+							</tr>
+							<tr>
+							  <td>Qual a sua idade?</td>
+							</tr>
+							<tr>
+							  <td>Qual o seu telefone?</td>
+							</tr>
+						  </tbody>
+						</table>
+					  </div>
+				</div>
+			</div>	
 		</div>
-		
-	</div>
-	
+	</div>	
 	
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->		
