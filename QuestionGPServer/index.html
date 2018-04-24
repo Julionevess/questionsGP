@@ -21,8 +21,11 @@
 				</li>			
 				<li class="nav-item">
 					<a class="nav-link" id="list-tab" data-toggle="tab" href="#list"  aria-controls="list" aria-selected="true">Listar Questões</a>
-				</li>
+				</li>				
 			</ul>
+			<div class="topnav search-container">
+				<input id="search" type="text" placeholder="Pesquisar..">
+			</div>
 		</nav>
 		<div class="tab-content" id="myTabContent">
 			<!-- Home -->
@@ -84,24 +87,17 @@
 				<div class="tab-content" id="myTabContent">
 					<div class="container">				
 						<p>Abaixo estão listadas as questões cadastradas, para visualizar a resposta de cada questão basta clicar na questão desejada</p>            
-						<table class="table table-striped">
-						  <thead>
-							<tr>
-							  <th>Pergunta</th>					  
-							</tr>
-						  </thead>
-						  <tbody>
-							<tr>
-							  <td>Qual o seu nome?</td>					  
-							</tr>
-							<tr>
-							  <td>Qual a sua idade?</td>
-							</tr>
-							<tr>
-							  <td>Qual o seu telefone?</td>
-							</tr>
-						  </tbody>
-						</table>
+						<div class="table-responsive">								
+							<table  class="table table-striped">
+								<thead>
+								<tr>
+									<th>Categoria</th>					  
+									<th>Pergunta</th>					  						
+								</tr>
+								</thead>
+								<tbody id="questionTable">						
+								</tbody>
+							</table>
 					  </div>
 				</div>
 			</div>	
