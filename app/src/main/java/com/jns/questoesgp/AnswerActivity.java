@@ -1,6 +1,7 @@
 package com.jns.questoesgp;
 
 import android.content.Context;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -8,24 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.jns.questoesgp.adapter.AnswerAdapter;
 import com.jns.questoesgp.model.Answer;
 import com.jns.questoesgp.model.Question;
 import com.jns.questoesgp.questoesgp.R;
 import com.jns.questoesgp.util.SharedPreferenceUtil;
-import com.jns.questoesgp.util.Util;
 
 import java.util.List;
 
@@ -37,9 +29,6 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private View rootView;
-
-
     public static final String CURRENT_PAGE = "currentPage";
     private static final String CORRECT = "Certo";
     private static final String WRONG = "Errado";
@@ -49,6 +38,8 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
     public static Context context;
     public static int currentPage;
     public Answer answer;
+
+
 
     /*
      * Correct Questions
@@ -89,7 +80,7 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent),
                 ContextCompat.getColor(this, R.color.colorPrimaryDark));
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setRefreshing(false);
 
 
 

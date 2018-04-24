@@ -104,10 +104,10 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
 
     private void init() {
         context = this;
-        currentPage = 1;
+        currentPage = 0;
         questions = SharedPreferenceUtil.getListQuestion(context);
         if (questions.size() > 0) {
-            questionOne = questions.get(0);
+            questionOne = questions.get(currentPage);
             answers = new ArrayList<Answer>();
         }
         answer = new Answer();
