@@ -74,6 +74,21 @@ clear:both;
 width:50%;		
 float:left;	}	
 
+.wrapper{
+  position:relative;
+  
+}
+.right,.left{
+  width:50%; ; display:inline-block;
+}
+
+.left{
+  float: left;  
+}
+.right{
+  float: right;;
+}
+
 .respostas{		
 width:50%;
 float:left;		}	

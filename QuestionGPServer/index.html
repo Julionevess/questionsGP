@@ -23,9 +23,7 @@
 					<a class="nav-link" id="list-tab" data-toggle="tab" href="#list"  aria-controls="list" aria-selected="true">Listar Questões</a>
 				</li>				
 			</ul>
-			<div class="topnav search-container">
-				<input id="search" type="text" placeholder="Pesquisar..">
-			</div>
+			
 		</nav>
 		<div class="tab-content" id="myTabContent">
 			<!-- Home -->
@@ -84,9 +82,28 @@
 					<!--button type="button" class="close" data-dismiss="alert" aria-label="Close">					
 				</button-->
 				</div>
+				
 				<div class="tab-content" id="myTabContent">
 					<div class="container">				
 						<p>Abaixo estão listadas as questões cadastradas, para visualizar a resposta de cada questão basta clicar na questão desejada</p>            
+						<div class="wrapper">							
+							<div class="input-group mb-2">
+								<div class="input-group-prepend ">
+									<label class="input-group-text" for="selectCategory">Filtrar categotria por...</label>
+								</div>
+								
+								<select class="custom-select" id="selectCategory">
+										<option selected>Todas as categorias</option>
+										<option value="1">Integração</option>
+										<option value="2">Escopo</option>
+									</select>
+								
+								
+							</div>
+							<div align="right" class="topnav search-container">
+								<input id="search" type="text" placeholder="Pesquisar..">
+							</div>
+						</div>						
 						<div class="table-responsive">								
 							<table  class="table table-striped">
 								<thead>

@@ -16,7 +16,7 @@ $(document).ready(function(){
 	});
   });
 
-var json = "[{\"id\":\"1\",\"question\":\"Qual o seu nome?\",\"answer\":\"Jose\",\"optionOne\":\"Maria\",\"optionTwo\":\"Fernando\",\"optionThree\":\"Joaquim\",\"optionFour\":\"Paulo\",\"category\":\"Categoria 1\"},{\"id\":\"2\",\"question\":\"Qual a sua idade?\",\"answer\":\"18\",\"optionOne\":\"17\",\"optionTwo\":\"22\",\"optionThree\":\"25\",\"optionFour\":\"33\",\"category\":\"Categoria 1\"},{\"id\":\"3\",\"question\":\"Qual o seu telefone?\",\"answer\":\"81 9.9898-9898\",\"optionOne\":\"11 9.9898-9898\",\"optionTwo\":\"88 9.9898-9898\",\"optionThree\":\"81 9.9898-7898\",\"optionFour\":\"81 9.9898-9897\",\"category\":\"Categoria 1\"}]"
+var json = "[{\"id\":\"1\",\"question\":\"O que é Escopo?\",\"answer\":\"Jose\",\"optionOne\":\"Maria\",\"optionTwo\":\"Fernando\",\"optionThree\":\"Joaquim\",\"optionFour\":\"Paulo\",\"category\":\"Integração\"},{\"id\":\"2\",\"question\":\"Qual a sua idade?\",\"answer\":\"18\",\"optionOne\":\"17\",\"optionTwo\":\"22\",\"optionThree\":\"25\",\"optionFour\":\"33\",\"category\":\"Escopo\"},{\"id\":\"3\",\"question\":\"Qual o seu telefone?\",\"answer\":\"81 9.9898-9898\",\"optionOne\":\"11 9.9898-9898\",\"optionTwo\":\"88 9.9898-9898\",\"optionThree\":\"81 9.9898-7898\",\"optionFour\":\"81 9.9898-9897\",\"category\":\"Categoria 1\"}]"
 
 var jsonObject = JSON.parse(json);
 
@@ -44,6 +44,25 @@ function sendForm(){
 	}	
 	
 }
+
+$('#selectCategory').change(function(e){
+	var str="";
+	$("#selectCategory option:selected").each(function() {
+		var value = $(this).text().toLowerCase();
+		$("#questionTable tr").filter(function() {
+			var $t = $(this).children(":eq("+0+")");
+			for (var d = 0; d < value.length; ++d) {
+				if ($t.is(":eq('" + value[d] + "')")) {
+					console.log(value[d]);
+					return true;
+				}
+			}
+			return false;
+			//$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+		
+	  });	
+  });
 
 function setObject(){
 
