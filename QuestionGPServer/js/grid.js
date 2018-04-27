@@ -44,25 +44,58 @@ function sendForm(){
 	}	
 	
 }
-
+/*
 $('#selectCategory').change(function(e){
 	var str="";
-	$("#selectCategory option:selected").each(function() {
-		var value = $(this).text().toLowerCase();
-		$("#questionTable tr").filter(function() {
-			var $t = $(this).children(":eq("+0+")");
-			for (var d = 0; d < value.length; ++d) {
-				if ($t.is(":eq('" + value[d] + "')")) {
-					console.log(value[d]);
-					return true;
-				}
-			}
-			return false;
-			//$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-		});
+	
+	$("#selectCategory option:selected").each(function() {		
+		var category = $(this).text().toLowerCase();
+		//var column = $('.left').index($("#questionth"));
 		
-	  });	
-  });
+		//$("#questionTable tr").filter(function() {
+		//	$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		
+		
+		
+
+		$("#questionTable tr").filter(function() {
+			var index = $(this).index('tr')
+			var value2 = $(this).find($("td")).eq(category).text().toLowerCase();
+			alert(index + category);
+			alert($(this).text());
+			if(index == 1){
+				alert("entrou");
+				$(this).toggle($(this).text().toLowerCase().indexOf(category) > -1)
+				
+			}
+/*
+			var column = $("#idQuestionHeadTable tr").text();
+			//alert(column);
+			var index = $(this).index('tr')
+			//alert(column);
+			//var column = $(this).find($("#questionth")).val();
+			//column = $("#questionth").val();
+			//column = $("#categoryth").text();
+		
+			//alert(value2);
+			$(this).toggle(value2.indexOf(category) > -1)
+			//return value2.indexOf(value) === -1;
+		*/
+		//});
+			
+	//
+
+	$('#selectCategory').change( function(e) {
+		var selSelection = $("#selectCategory").val();
+		  alert(selSelection);
+		if(selSelection == "Todas as categorias"){
+			$("#questionTable tr").show();
+		} else {
+			$("#questionTable tr").show().filter(function(index){
+				return $("td:eq(0)", this).html().indexOf(selSelection) == -1;
+			}).hide();
+		}
+	});
 
 function setObject(){
 
@@ -106,6 +139,8 @@ $(function() {
 		$('#alert').attr('class', ('invisible'));
 		
 	});
+
+	
 });
 
 function loadTable(){
@@ -122,6 +157,7 @@ function loadTable(){
              alert(index + "   :   " + value);
         }
 	});
+	
 	/*
 	for (var prop in jsonObject) {
 		alert("id:" + prop.id);
@@ -140,6 +176,7 @@ function loadTable(){
 
 function init(){
 	loadTable();
+	
 /*
 	var txt = '';
 	var xmlhttp = new XMLHttpRequest();
