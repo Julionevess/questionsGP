@@ -19,10 +19,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.jns.questoesgp.FirstQuestionActivity"/>
-        <activity android:name="com.jns.questoesgp.QuestionActivity"/>
-        <activity android:name="com.jns.questoesgp.LastQuestionActivity"/>
-        <activity android:name="com.jns.questoesgp.AnswerActivity"/>
+        <activity android:name="com.jns.questoesgp.FirstQuestionActivity" />
+        <activity android:name="com.jns.questoesgp.QuestionActivity" />
+        <activity android:name="com.jns.questoesgp.LastQuestionActivity" />
+        <activity android:name="com.jns.questoesgp.AnswerActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <data android:type="linear" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+
+                <data android:scheme="mailto" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.jns.questoesgp.util.BaseActivity"
+            android:label="@string/title_activity_base"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

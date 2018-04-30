@@ -1,7 +1,9 @@
 package com.jns.questoesgp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,7 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jns.questoesgp.adapter.AnswerAdapter;
 import com.jns.questoesgp.model.Answer;
@@ -33,11 +38,21 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
     private static final String CORRECT = "Certo";
     private static final String WRONG = "Errado";
 
+    private TextView tvAnswerTitle;
+    private TextView tvAnswerCorrect;
+    private TextView tvAnswerWrong;
+
+    private Button btnSendEmail;
+
     public static List<Answer> answers;
     public static List<Question> questions;
     public static Context context;
     public static int currentPage;
     public Answer answer;
+
+    int countCorrect;
+    int countWrong;
+
 
 
 
@@ -82,50 +97,53 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setRefreshing(false);
 
-
-
-
-        /*
-        TextView tvQuestion = (TextView) findViewById(R.id.tvQuestion);
-        rbOptionOne = (RadioButton) findViewById((R.id.rbOptionOne));
-        rbOptionTwo = (RadioButton) findViewById((R.id.rbOptionTwo));
-        rbOptionThree = (RadioButton) findViewById((R.id.rbOptionThree));
-        rbOptionFour = (RadioButton) findViewById((R.id.rbOptionFour));
-        rbOptionFive = (RadioButton) findViewById((R.id.rbOptionFive));
-
-        rgOptions = (RadioGroup) findViewById(R.id.rgOptions);
-
-        rgOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        btnSendEmail = (Button) findViewById(R.id.btnSendEmail);
+        btnSendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == rbOptionOne.getId()){
-                    answer.setAnswer(rbOptionOne.getText().toString());
-                }else if (checkedId == rbOptionTwo.getId()){
-                    answer.setAnswer(rbOptionTwo.getText().toString());
-                }else if (checkedId == rbOptionThree.getId()){
-                    answer.setAnswer(rbOptionThree.getText().toString());
-                }else if (checkedId == rbOptionFour.getId()){
-                    answer.setAnswer(rbOptionFour.getText().toString());
-                }else if (checkedId == rbOptionFive.getId()){
-                    answer.setAnswer(rbOptionFive.getText().toString());
-                }
+            public void onClick(View v) {
+                String email[] = new String[1];
+                email[0] = "julionevess@gmail.com";
+                composeEmail(email, "Resposta do Questionário");
             }
         });
 
-        options = Util.unsortedList(questionSelected);
-        tvQuestion.setText(questionSelected.getQuestion());
-        rbOptionOne.setText(options.get(0));
-        rbOptionTwo.setText(options.get(1));
-        rbOptionThree.setText(options.get(2));
-        rbOptionFour.setText(options.get(3));
-        rbOptionFive.setText(options.get(4));
 
-        btnCorrect = (Button) findViewById(R.id.btnNext);
-        btnBack = (Button) findViewById(R.id.btnBack);
+        tvAnswerTitle = (TextView) findViewById(R.id.tvAnswerTitle);
+        tvAnswerCorrect = (TextView) findViewById(R.id.tvAnswerCorrect);
+        tvAnswerWrong = (TextView) findViewById(R.id.tvAnswerWrong);
 
-        btnCorrect = (Button) findViewById(R.id.btnNext);
+        checkAnswer();
 
-*/
+
+
+    }
+
+    private void checkAnswer(){
+        countCorrect = 0 ;
+        countWrong = 0 ;
+
+        for (Answer answer:answers) {
+            if (answer.getAnswer().equals(answer.getCorrectAnswer())){
+                countCorrect++;
+            }else{
+                countWrong++;
+            }
+        }
+
+        if (countCorrect == 0 ){
+            tvAnswerCorrect.setText("Você não acertou nenhuma questão");
+        }else if (countCorrect == 1 ){
+            tvAnswerCorrect.setText("Você acertou " + countCorrect + " questão");
+        }else{
+            tvAnswerCorrect.setText("Você acertou " + countCorrect + " questões");
+        }
+        if (countWrong == 0){
+            tvAnswerWrong.setText("Você não errou nenhuma questão");
+        }else if(countWrong == 1){
+            tvAnswerWrong.setText("Você errou " + countWrong  + " questão");
+        }else{
+            tvAnswerWrong.setText("Você errou " + countWrong  + " questões");
+        }
     }
 
     private void init() {
@@ -139,6 +157,17 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
         }
         answers = SharedPreferenceUtil.getListAnswers(context);
 
+    }
+
+    public void composeEmail(String[] addresses, String subject){//, Uri attachment) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+//        intent.putExtra(Intent.EXTRA_STREAM, attachment);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
     @Override

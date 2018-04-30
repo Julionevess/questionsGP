@@ -16,12 +16,13 @@ import android.widget.TextView;
 import com.jns.questoesgp.model.Answer;
 import com.jns.questoesgp.model.Question;
 import com.jns.questoesgp.questoesgp.R;
+import com.jns.questoesgp.util.BaseActivity;
 import com.jns.questoesgp.util.SharedPreferenceUtil;
 import com.jns.questoesgp.util.Util;
 
 import java.util.List;
 
-public class LastQuestionActivity extends AppCompatActivity implements View.OnClickListener{
+public class LastQuestionActivity extends BaseActivity implements View.OnClickListener{
 
     public static final String CURRENT_PAGE = "currentPage";
     private static final String CORRECT = "Certo";
@@ -105,6 +106,8 @@ public class LastQuestionActivity extends AppCompatActivity implements View.OnCl
         btnCorrect.setOnClickListener(this);
         btnBack = (Button) findViewById(R.id.btnBack);
 
+        TextView tvQuestionNumber = (TextView) findViewById(R.id.tvQuestionNumber);
+        tvQuestionNumber.setText(tvQuestionNumber.getText().toString() + (currentPage + 1));
 
 
     }
@@ -157,20 +160,32 @@ public class LastQuestionActivity extends AppCompatActivity implements View.OnCl
             }else{
                 answers.add(answer);
             }
-//            correctQuestions();
 
-            SharedPreferenceUtil.setListAnswer(context, answers);
+            if (allQuestionsAreAnswered()) {
 
-            Intent intent = new Intent(context, AnswerActivity.class);
-            Bundle b = new Bundle();
-            b.putInt(CURRENT_PAGE, currentPage);
-            intent.putExtras(b);
-            startActivity(intent);
-            finish();
-            startActivity(intent);
+                SharedPreferenceUtil.setListAnswer(context, answers);
+
+                Intent intent = new Intent(context, AnswerActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(CURRENT_PAGE, currentPage);
+                intent.putExtras(b);
+                startActivity(intent);
+            }else{
+                showSnackMessage(R.string.msg_fill_all_questions);
+            }
+
 
         }else if (v.getId() == btnBack.getId()){
         super.onBackPressed();
     }
+    }
+
+    private boolean allQuestionsAreAnswered() {
+        for (Answer answer: answers) {
+            if (answer.getAnswer().trim().equals("")){
+                return false;
+            }
+        }
+        return true;
     }
 }

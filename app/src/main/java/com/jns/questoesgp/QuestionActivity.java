@@ -90,6 +90,9 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
         btnNext.setOnClickListener(this);
         btnBack.setOnClickListener(this);
 
+        TextView tvQuestionNumber = (TextView) findViewById(R.id.tvQuestionNumber);
+        tvQuestionNumber.setText(tvQuestionNumber.getText().toString() + (currentPage + 1));
+
     }
 
     private void init() {
@@ -145,8 +148,6 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
 
             b.putInt(CURRENT_PAGE, currentPage);
             intent.putExtras(b);
-            startActivity(intent);
-            finish();
             startActivity(intent);
         }else if (v.getId() == btnBack.getId()){
             super.onBackPressed();

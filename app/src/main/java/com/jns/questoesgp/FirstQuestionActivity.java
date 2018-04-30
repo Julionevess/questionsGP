@@ -70,6 +70,10 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
         rbOptionFour = (RadioButton) findViewById((R.id.rbOptionFour));
         rbOptionFive = (RadioButton) findViewById((R.id.rbOptionFive));
 
+        TextView tvQuestionNumber = (TextView) findViewById(R.id.tvQuestionNumber);
+        tvQuestionNumber.setText(tvQuestionNumber.getText().toString() + (currentPage + 1));
+
+
         rgOptions = (RadioGroup) findViewById(R.id.rgOptions);
 
         rgOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -152,8 +156,6 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
             Bundle b = new Bundle();
             b.putInt(CURRENT_PAGE, currentPage);
             intent.putExtras(b);
-            startActivity(intent);
-            finish();
             startActivity(intent);
         }
 

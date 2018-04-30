@@ -21,6 +21,7 @@ public class AnswerViewHolders extends RecyclerView.ViewHolder {
     public TextView answer;
     public TextView correctAnswer;
     public TextView question;
+    public TextView tv_numberQuestion;
     public ImageView ivAnswer;
     public ImageView ivCorrect_Answer;
     public LinearLayout llCorrectAnswer;
@@ -51,6 +52,7 @@ public class AnswerViewHolders extends RecyclerView.ViewHolder {
         ivAnswer = (ImageView) itemView.findViewById((R.id.iv_answer));
         ivCorrect_Answer = (ImageView) itemView.findViewById((R.id.iv_correct_answer));
         llCorrectAnswer = (LinearLayout) itemView.findViewById((R.id.layout_correct_answer));
+        tv_numberQuestion = (TextView) itemView.findViewById((R.id.tv_numberQuestion));
 
     }
 }

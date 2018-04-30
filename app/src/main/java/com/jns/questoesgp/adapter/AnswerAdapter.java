@@ -67,6 +67,14 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerViewHolders> {
             holder.ivCorrect_Answer.setVisibility(View.VISIBLE);
         }
 
+        if (holderItem.getQuestion() != null && !holderItem.getQuestion().trim().equals("")) {
+            holder.tv_numberQuestion.setVisibility(View.VISIBLE);
+            holder.tv_numberQuestion.setText("Questão " + (position + 1));
+        } else {
+            holder.tv_numberQuestion.setVisibility(View.GONE);
+        }
+
+
     }
 
     @Override
