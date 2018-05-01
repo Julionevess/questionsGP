@@ -2,8 +2,6 @@ package com.jns.questoesgp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jns.questoesgp.adapter.AnswerAdapter;
@@ -49,6 +46,8 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
     public static Context context;
     public static int currentPage;
     public Answer answer;
+
+    private TextView tvStart;
 
     int countCorrect;
     int countWrong;
@@ -107,6 +106,20 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
             }
         });
 
+
+        tvStart = (TextView) findViewById(R.id.tvStart);
+        tvStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+                
+        
+        
+        
 
         tvAnswerTitle = (TextView) findViewById(R.id.tvAnswerTitle);
         tvAnswerCorrect = (TextView) findViewById(R.id.tvAnswerCorrect);
@@ -173,7 +186,7 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 

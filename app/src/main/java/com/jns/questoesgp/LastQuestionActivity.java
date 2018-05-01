@@ -42,6 +42,7 @@ public class LastQuestionActivity extends BaseActivity implements View.OnClickLi
     private RadioGroup rgOptions;
     Button btnCorrect;
     private Button btnBack;
+    private TextView tvGiveUp;
     public Answer answer;
 
     /*
@@ -94,6 +95,9 @@ public class LastQuestionActivity extends BaseActivity implements View.OnClickLi
             }
         });
 
+        tvGiveUp = (TextView) findViewById(R.id.tvGiveUp);
+        tvGiveUp.setOnClickListener(this);
+
         options = Util.unsortedList(questionSelected);
         tvQuestion.setText(questionSelected.getQuestion());
         rbOptionOne.setText(options.get(0));
@@ -133,7 +137,7 @@ public class LastQuestionActivity extends BaseActivity implements View.OnClickLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -177,12 +181,16 @@ public class LastQuestionActivity extends BaseActivity implements View.OnClickLi
 
         }else if (v.getId() == btnBack.getId()){
         super.onBackPressed();
-    }
+        }else if (v.getId() == tvGiveUp.getId()) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
     }
 
     private boolean allQuestionsAreAnswered() {
         for (Answer answer: answers) {
-            if (answer.getAnswer().trim().equals("")){
+            if (answer.getAnswer() == null || answer.getAnswer().trim().equals("")){
                 return false;
             }
         }

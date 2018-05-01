@@ -37,6 +37,7 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
     private RadioButton rbOptionFour;
     private RadioButton rbOptionFive;
     private RadioGroup rgOptions;
+    private TextView tvGiveUp;
     public static final String CURRENT_PAGE = "currentPage";
     public Answer answer;
 
@@ -74,6 +75,9 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
                 }
             }
         });
+
+        tvGiveUp = (TextView) findViewById(R.id.tvGiveUp);
+        tvGiveUp.setOnClickListener(this);
 
         options = Util.unsortedList(questionSelected);
 
@@ -116,7 +120,7 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -151,6 +155,10 @@ public class QuestionActivity extends AppCompatActivity implements View.OnClickL
             startActivity(intent);
         }else if (v.getId() == btnBack.getId()){
             super.onBackPressed();
-        }
+        }else if (v.getId() == tvGiveUp.getId()){
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
     }
 }

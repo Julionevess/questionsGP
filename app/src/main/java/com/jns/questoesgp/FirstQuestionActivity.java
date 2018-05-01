@@ -48,7 +48,8 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
     private RadioButton rbOptionFour;
     private RadioButton rbOptionFive;
     private RadioGroup rgOptions;
-    TextView tvQuestion;
+    private TextView tvQuestion;
+    private TextView tvGiveUp;
     public static final String CURRENT_PAGE = "currentPage";
     Answer answer;
 
@@ -70,8 +71,12 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
         rbOptionFour = (RadioButton) findViewById((R.id.rbOptionFour));
         rbOptionFive = (RadioButton) findViewById((R.id.rbOptionFive));
 
+        tvGiveUp = (TextView) findViewById(R.id.tvGiveUp);
+        tvGiveUp.setOnClickListener(this);
+
         TextView tvQuestionNumber = (TextView) findViewById(R.id.tvQuestionNumber);
         tvQuestionNumber.setText(tvQuestionNumber.getText().toString() + (currentPage + 1));
+
 
 
         rgOptions = (RadioGroup) findViewById(R.id.rgOptions);
@@ -95,6 +100,8 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
 
         btnNext = (Button) findViewById(R.id.btnNext);
         btnNext.setOnClickListener(this);
+
+
 
         options = Util.unsortedList(questionOne);
         tvQuestion.setText(questionOne.getQuestion());
@@ -122,7 +129,7 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -156,6 +163,10 @@ public class FirstQuestionActivity extends AppCompatActivity implements View.OnC
             Bundle b = new Bundle();
             b.putInt(CURRENT_PAGE, currentPage);
             intent.putExtras(b);
+            startActivity(intent);
+        }else if (v.getId() == tvGiveUp.getId()){
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
 

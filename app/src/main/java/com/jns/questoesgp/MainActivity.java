@@ -18,6 +18,7 @@ import com.google.gson.stream.JsonReader;
 import com.jns.questoesgp.model.Answer;
 import com.jns.questoesgp.model.Question;
 import com.jns.questoesgp.questoesgp.R;
+import com.jns.questoesgp.util.BaseActivity;
 import com.jns.questoesgp.util.SharedPreferenceUtil;
 
 import java.io.FileReader;
@@ -29,10 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
-
-
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String CATEGORY_INTEGRATION = "Integração";
     private static final String CATEGORY_SCOPE = "Escopo";
@@ -44,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String CATEGORY_RISK = "Risco";
     private static final String CATEGORY_SCHEDULE = "Cronograma";
     private static final String CATEGORY_STAKEHOLDER = "Partes interessadas";
-
+    private static final String CATEGORY_ALL_SUBJECT = "Todos os assuntos";
 
     public static Context context;
 
@@ -114,9 +112,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         CardView cardIntegration = (CardView) findViewById(R.id.cardIntegration);
         CardView cardScope = (CardView) findViewById(R.id.cardScope);
+        CardView cardAllSubject = (CardView) findViewById(R.id.cardAllSubject);
+        CardView cardAquisition = (CardView) findViewById(R.id.cardAquisition);
+        CardView cardCode = (CardView) findViewById(R.id.cardCode);
+        CardView cardComunication = (CardView) findViewById(R.id.cardComunication);
+        CardView cardCost = (CardView) findViewById(R.id.cardCost);
+        CardView cardResources = (CardView) findViewById(R.id.cardResources);
+        CardView cardRisk = (CardView) findViewById(R.id.cardRisk);
+        CardView cardSchedule = (CardView) findViewById(R.id.cardSchedule);
+        CardView cardQuality = (CardView) findViewById(R.id.cardQuality);
+        CardView cardStackholders = (CardView) findViewById(R.id.cardStackholders);
 
         cardIntegration.setOnClickListener(this);
         cardScope.setOnClickListener(this);
+        cardAllSubject.setOnClickListener(this);
+        cardAquisition.setOnClickListener(this);
+        cardCode.setOnClickListener(this);
+        cardComunication.setOnClickListener(this);
+        cardCost.setOnClickListener(this);
+        cardResources.setOnClickListener(this);
+        cardRisk.setOnClickListener(this);
+        cardSchedule.setOnClickListener(this);
+        cardQuality.setOnClickListener(this);
+        cardStackholders.setOnClickListener(this);
+
 
     }
 
@@ -125,12 +144,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v.getId() == R.id.cardIntegration) {
             catchSelectedQuestionsByCategory(CATEGORY_INTEGRATION);
+            SharedPreferenceUtil.getListQuestion(context);
+            startActivity(new Intent(context, FirstQuestionActivity.class));
         } else if (v.getId() == R.id.cardScope) {
-            catchSelectedQuestionsByCategory(CATEGORY_SCOPE);
+//            catchSelectedQuestionsByCategory(CATEGORY_SCOPE);
+            showSnackMessage(R.string.msg_category_is_empty);
+        } else if (v.getId() == R.id.cardAquisition) {
+//            catchSelectedQuestionsByCategory(CATEGORY_ACQUISITION);
+            showSnackMessage(R.string.msg_category_is_empty);
+        } else if (v.getId() == R.id.cardCode) {
+//            catchSelectedQuestionsByCategory(CATEGORY_);
+            showSnackMessage(R.string.msg_category_is_empty);
+        } else if (v.getId() == R.id.cardComunication) {
+//            catchSelectedQuestionsByCategory(CATEGORY_COMMUNICATION);
+            showSnackMessage(R.string.msg_category_is_empty);
+        } else if (v.getId() == R.id.cardCost) {
+//            catchSelectedQuestionsByCategory(CATEGORY_COSTE);
+            showSnackMessage(R.string.msg_category_is_empty);
+        } else if (v.getId() == R.id.cardResources) {
+//            catchSelectedQuestionsByCategory(CATEGORY_RESOURCE);
+            showSnackMessage(R.string.msg_category_is_empty);
+        } else if (v.getId() == R.id.cardRisk) {
+//            catchSelectedQuestionsByCategory(CATEGORY_RISK);
+            showSnackMessage(R.string.msg_category_is_empty);
+        } else if (v.getId() == R.id.cardSchedule) {
+//            catchSelectedQuestionsByCategory(CATEGORY_SCHEDULE);
+            showSnackMessage(R.string.msg_category_is_empty);
+        } else if (v.getId() == R.id.cardQuality) {
+//            catchSelectedQuestionsByCategory(CATEGORY_QUALITY);
+            showSnackMessage(R.string.msg_category_is_empty);
+        } else if (v.getId() == R.id.cardStackholders) {
+//            catchSelectedQuestionsByCategory(CATEGORY_STAKEHOLDER);
+            showSnackMessage(R.string.msg_category_is_empty);
+        } else if (v.getId() == R.id.cardAllSubject) {
+//            catchSelectedQuestionsByCategory(CATEGORY_ALL_SUBJECT);
+            showSnackMessage(R.string.msg_category_is_empty);
         }
 
-        SharedPreferenceUtil.getListQuestion(context);
-        startActivity(new Intent(context, FirstQuestionActivity.class));
+
 
 
     }
