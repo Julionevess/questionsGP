@@ -1,11 +1,11 @@
-﻿
-
-var question;
+﻿var question;
 var correctAnswer;
 var incorrectOptionOne;
 var incorrectOptionTwo;
 var incorrectOptionThree;
 var incorrectOptionFour;
+
+var jsonObjectSelected;
 
 $(document).ready(function(){
 	$("#search").on("keyup", function() {
@@ -44,46 +44,6 @@ function sendForm(){
 	}	
 	
 }
-/*
-$('#selectCategory').change(function(e){
-	var str="";
-	
-	$("#selectCategory option:selected").each(function() {		
-		var category = $(this).text().toLowerCase();
-		//var column = $('.left').index($("#questionth"));
-		
-		//$("#questionTable tr").filter(function() {
-		//	$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-		
-		
-		
-
-		$("#questionTable tr").filter(function() {
-			var index = $(this).index('tr')
-			var value2 = $(this).find($("td")).eq(category).text().toLowerCase();
-			alert(index + category);
-			alert($(this).text());
-			if(index == 1){
-				alert("entrou");
-				$(this).toggle($(this).text().toLowerCase().indexOf(category) > -1)
-				
-			}
-/*
-			var column = $("#idQuestionHeadTable tr").text();
-			//alert(column);
-			var index = $(this).index('tr')
-			//alert(column);
-			//var column = $(this).find($("#questionth")).val();
-			//column = $("#questionth").val();
-			//column = $("#categoryth").text();
-		
-			//alert(value2);
-			$(this).toggle(value2.indexOf(category) > -1)
-			//return value2.indexOf(value) === -1;
-		*/
-		//});
-			
-	//
 
 	$('#selectCategory').change( function(e) {
 		var selSelection = $("#selectCategory").val();
@@ -92,7 +52,7 @@ $('#selectCategory').change(function(e){
 			$("#questionTable tr").show();
 		} else {
 			$("#questionTable tr").show().filter(function(index){
-				return $("td:eq(0)", this).html().indexOf(selSelection) == -1;
+				return $("td:eq(1)", this).html().indexOf(selSelection) == -1;
 			}).hide();
 		}
 	});
@@ -143,14 +103,32 @@ $(function() {
 	
 });
 
+function loadQuestion(){
+	alert("chamou");
+	
+	for (var i = 0 ; i < jsonObject.length ; i++){
+		if (jsonObject[i].id == idSelected){
+			jsonObjectSelected = jsonObject[i];
+		}
+	}
+	
+
+
+	
+
+}
+
+
+
 function loadTable(){
 
 	jQuery.each(jsonObject, function (index, value) {
         if (typeof value == 'object') {
 			var row = $('<tr></tr>');
 			$('#questionTable').append(row);
+			$('<td></td>').attr({ class: ["col-0 invisible"]}).text(value.id).appendTo(row).hide();
 			$('<td></td>').attr({ class: ["col-20"]}).text(value.category).appendTo(row);
-			$('<td></td>').attr({ class: ["col-80"]}).text(value.question).appendTo(row);
+			$('<td></td>').attr({ class: ["col-79"]}).text(value.question).appendTo(row);
             
         }
         else {
@@ -158,47 +136,31 @@ function loadTable(){
         }
 	});
 	
-	/*
-	for (var prop in jsonObject) {
-		alert("id:" + prop.id);
-		alert("Question:" + prop.question);
-	}
-
-/*
-	for(i=0; i<3; i++){
-		var row = $('<tr></tr>');
-		$('#questionTable').append(row);
-		$('<td></td>').attr({ class: ["col-20"]}).text("Cat" + i).appendTo(row);
-		$('<td></td>').attr({ class: ["col-80"]}).text("Pergunta" + i).appendTo(row);
-		
-	}*/
+	
 }
 
 function init(){
 	loadTable();
 	
-/*
-	var txt = '';
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function(){
-	  if(xmlhttp.status == 200 && xmlhttp.readyState == 4){
-		txt = xmlhttp.responseText;
-	  }
-	};
-	xmlhttp.open("GET","abc.txt",true);
-	//alert(xmlhttp.val);
-	xmlhttp.send();
+	$('#questionTable').find('tr').click( function(){
+		var idSelected = $(this).find('td:first').text();
+		for (var i = 0 ; i < jsonObject.length ; i++){
+			if (jsonObject[i].id == idSelected){
+				jsonObjectSelected = jsonObject[i];				
+				$('#myModal').modal('toggle');
+				break;
 
-/*
-	var txtFile = "c:/test.txt";
-	var file = File.ReadLine(txtFile,);
-	var str = "My string of text";
-	
-	file.open("w"); // open file with write access
-	file.writeln("First line of text");
-	file.writeln("Second line of text " + str);
-	file.write(str);
-	file.close();*/
+			}
+		}
+
+		$("#questionModal").val(jsonObjectSelected.question);
+		$("#correctAnswerModal").val(jsonObjectSelected.answer);
+		$("#incorrectOptionOneModal").val(jsonObjectSelected.optionOne);
+		$("#incorrectOptionTwoModal").val(jsonObjectSelected.optionTwo);
+		$("#incorrectOptionThreeModal").val(jsonObjectSelected.optionThree);
+		$("#incorrectOptionFourModal").val(jsonObjectSelected.optionFour);
+
+	});
 }
 
 
