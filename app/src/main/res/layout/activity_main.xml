@@ -485,7 +485,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:layout_gravity="center_horizontal"
-                        android:src="@mipmap/ic_launcher"
+                        android:src="@mipmap/all"
                         />
                     <TextView
                         android:layout_width="match_parent"
@@ -524,7 +524,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:layout_gravity="center_horizontal"
-                        android:src="@mipmap/ic_launcher"
+                        android:src="@mipmap/code"
                         />
                     <TextView
                         android:layout_width="match_parent"
