@@ -173,7 +173,7 @@ public class QuestionsActivity extends AppCompatActivity implements View.OnClick
 	private boolean handleLastQuestion() {
 		if (isLastQuestion) {
 			if (!hasAllAnswerFilled()) {
-				AndroidUtil.showMessageOK(getApplicationContext(), getString(R.string.msg_fill_all_questions));
+				AndroidUtil.showMessageOK(QuestionsActivity.this, getString(R.string.msg_fill_all_questions));
 
 			} else {
 				SharedPreferenceUtil.setListAnswer(getApplicationContext(), answers);
