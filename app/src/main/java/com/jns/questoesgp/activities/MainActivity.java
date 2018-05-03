@@ -1,17 +1,13 @@
-package com.jns.questoesgp;
+package com.jns.questoesgp.activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.view.View;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -21,7 +17,6 @@ import com.jns.questoesgp.questoesgp.R;
 import com.jns.questoesgp.util.BaseActivity;
 import com.jns.questoesgp.util.SharedPreferenceUtil;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -145,7 +140,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (v.getId() == R.id.cardIntegration) {
             catchSelectedQuestionsByCategory(CATEGORY_INTEGRATION);
             SharedPreferenceUtil.getListQuestion(context);
-            startActivity(new Intent(context, FirstQuestionActivity.class));
+            final Intent intent = new Intent(context, QuestionsActivity.class);
+            intent.putExtra("totalQuestions", 4);//TODO passar aqui a quantidade desejada de questoes
+            startActivity(intent);
         } else if (v.getId() == R.id.cardScope) {
 //            catchSelectedQuestionsByCategory(CATEGORY_SCOPE);
             showSnackMessage(R.string.msg_category_is_empty);

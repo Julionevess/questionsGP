@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jns.questoesgp.questoesgp">
+<manifest package="com.jns.questoesgp.questoesgp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="true"
@@ -10,47 +10,45 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.jns.questoesgp.MainActivity"
+            android:name="com.jns.questoesgp.activities.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.jns.questoesgp.FirstQuestionActivity"
-                    android:screenOrientation="portrait">
-        </activity>
-        <activity android:name="com.jns.questoesgp.QuestionActivity"
+
+        <activity
+            android:name="com.jns.questoesgp.activities.QuestionsActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name="com.jns.questoesgp.LastQuestionActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity android:name="com.jns.questoesgp.AnswerActivity"
+
+        <activity
+            android:name="com.jns.questoesgp.activities.AnswerActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND"/>
 
-                <data android:type="linear" />
+                <data android:type="linear"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.SENDTO" />
+                <action android:name="android.intent.action.SENDTO"/>
 
-                <data android:scheme="mailto" />
+                <data android:scheme="mailto"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
             android:name="com.jns.questoesgp.util.BaseActivity"
             android:label="@string/title_activity_base"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

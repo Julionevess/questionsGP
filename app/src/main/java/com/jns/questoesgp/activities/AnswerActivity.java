@@ -1,4 +1,4 @@
-package com.jns.questoesgp;
+package com.jns.questoesgp.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -116,10 +116,10 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
                 startActivity(intent);
             }
         });
-                
-        
-        
-        
+
+
+
+
 
         tvAnswerTitle = (TextView) findViewById(R.id.tvAnswerTitle);
         tvAnswerCorrect = (TextView) findViewById(R.id.tvAnswerCorrect);
