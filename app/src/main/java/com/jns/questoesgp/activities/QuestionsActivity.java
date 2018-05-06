@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.jns.questoesgp.util.SharedPreferenceUtil;
 import com.jns.questoesgp.util.Util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class QuestionsActivity extends AppCompatActivity implements View.OnClick
 	private TextView tvQuestion;
 	private TextView tvGiveUp;
 
-	public List<Answer> answers;
+	public Answer answers[];
 	public List<Question> questions;
 	public int currentPage = 0;
 
@@ -37,7 +39,10 @@ public class QuestionsActivity extends AppCompatActivity implements View.OnClick
 	private Answer selectedAnswer;
 	private HashMap<Integer, String> optionsViews;
 	private boolean isLastQuestion = false;
+	private boolean isFirstQuestion = false;
 	private int totalQuestions;
+	private Button btnBack;
+	private Button btnNext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +55,11 @@ public class QuestionsActivity extends AppCompatActivity implements View.OnClick
 		tvGiveUp = (TextView) findViewById(R.id.tvGiveUp);
 		tvGiveUp.setOnClickListener(this);
 
-		findViewById(R.id.btnNext).setOnClickListener(this);
-		findViewById(R.id.btnBack).setOnClickListener(this);
+		btnNext = (Button) findViewById(R.id.btnNext);
+		btnBack = (Button) findViewById(R.id.btnBack);
+
+		btnBack.setOnClickListener(this);
+		btnNext.setOnClickListener(this);
 	}
 
 	@Override
@@ -59,13 +67,23 @@ public class QuestionsActivity extends AppCompatActivity implements View.OnClick
 		super.onStart();
 
 		totalQuestions = getIntent().getExtras().getInt("totalQuestions");
-		answers = new ArrayList<>();
+		answers = new Answer[totalQuestions];
 		renderQuestion();
 	}
 
 	private void renderQuestion() {
 
 		isLastQuestion = totalQuestions == (currentPage + 1);
+		isFirstQuestion = currentPage == 0;
+
+		if (isLastQuestion)
+			btnNext.setText("Entregar o questionário");
+		else
+			btnNext.setText("Next");
+		if (isFirstQuestion)
+			btnBack.setVisibility(View.INVISIBLE);
+		else
+			btnBack.setVisibility(View.VISIBLE);
 
 		questions = SharedPreferenceUtil.getListQuestion(getApplicationContext());
 		if (questions.size() > 0) {
@@ -85,7 +103,9 @@ public class QuestionsActivity extends AppCompatActivity implements View.OnClick
 
 	private void populateAnswerOptions() {
 		RadioGroup rgOptions = (RadioGroup) findViewById(R.id.rgOptions);
+		rgOptions.clearCheck();
 		rgOptions.removeAllViews();
+
 
 		rgOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 			@Override
@@ -105,7 +125,7 @@ public class QuestionsActivity extends AppCompatActivity implements View.OnClick
 			rgOptions.addView(rb);
 			optionsViews.put(id, option);
 			id++;
-			if (selectedAnswer != null && selectedAnswer.getAnswer().equals(option)) {
+			if (selectedAnswer != null && selectedAnswer.getAnswer() != null && selectedAnswer.getAnswer().equals(option)) {
 				rb.setChecked(true);
 			} else {
 				rb.setChecked(false);
@@ -146,13 +166,16 @@ public class QuestionsActivity extends AppCompatActivity implements View.OnClick
 
 		if (v.getId() == R.id.btnNext) {
 
-			answers.add(currentPage, answer);
+		    if (answer != null){
+                answers[currentPage] = answer;
+            }
 
 			if (handleLastQuestion())
 				return;
 
-			SharedPreferenceUtil.setListAnswer(getApplicationContext(), answers);
+			SharedPreferenceUtil.setListAnswer(getApplicationContext(), Arrays.asList(answers));
 			currentPage++;
+			selectedAnswer = answers[currentPage];
 
 			renderQuestion();
 
@@ -161,26 +184,27 @@ public class QuestionsActivity extends AppCompatActivity implements View.OnClick
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 		} else if (v.getId() == R.id.btnBack) {
+            if (answer != null){
+                answers[currentPage] = answer;
+            }
 			if (currentPage > 0) {
 				currentPage--;
-				selectedAnswer = answers.get(currentPage);
+				selectedAnswer = answers[currentPage];
 				renderQuestion();
 			}
 		}
-
 	}
 
 	private boolean handleLastQuestion() {
 		if (isLastQuestion) {
+
 			if (!hasAllAnswerFilled()) {
 				AndroidUtil.showMessageOK(QuestionsActivity.this, getString(R.string.msg_fill_all_questions));
-
 			} else {
-				SharedPreferenceUtil.setListAnswer(getApplicationContext(), answers);
+				SharedPreferenceUtil.setListAnswer(getApplicationContext(), Arrays.asList(answers));
 				startActivity(new Intent(getApplicationContext(), AnswerActivity.class));
 				finish();
 			}
-
 			return true;
 		}
 		return false;

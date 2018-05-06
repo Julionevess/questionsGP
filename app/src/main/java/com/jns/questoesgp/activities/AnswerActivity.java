@@ -21,39 +21,30 @@ import com.jns.questoesgp.model.Question;
 import com.jns.questoesgp.questoesgp.R;
 import com.jns.questoesgp.util.SharedPreferenceUtil;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
-
-
-    private AnswerAdapter adapter;
-
-    private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
 
     public static final String CURRENT_PAGE = "currentPage";
     private static final String CORRECT = "Certo";
     private static final String WRONG = "Errado";
 
+    private AnswerAdapter adapter;
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private TextView tvAnswerTitle;
     private TextView tvAnswerCorrect;
     private TextView tvAnswerWrong;
-
     private Button btnSendEmail;
-
-    public static List<Answer> answers;
-    public static List<Question> questions;
-    public static Context context;
-    public static int currentPage;
-    public Answer answer;
-
+    public Answer[] answers;
+    public List<Question> questions;
+    public Context context;
+    public int currentPage;
+    private Integer totalQuestions;
     private TextView tvStart;
-
     int countCorrect;
     int countWrong;
-
-
-
 
     /*
      * Correct Questions
@@ -61,16 +52,13 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
     public static void correctQuestions(){
 
         for (int i = 0; i < questions.size() ; i++) {
-            if (questions.get(i).getAnswer().equals(answers.get(i).getAnswer())){
-                answers.get(i).setSituation(CORRECT);
+            if (questions.get(i).getAnswer().equals(answers[i].getAnswer())){
+                answers[i].setSituation(CORRECT);
             }else{
-                answers.get(i).setSituation(WRONG);
+                answers[i].setSituation(WRONG);
             }
         }
-
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +70,12 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
         init();
 
         adapter = new AnswerAdapter(this);
-        adapter.setItems(answers);
+        adapter.setItems(Arrays.asList(answers));
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.swapAdapter(adapter, true);
-
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent),
@@ -106,7 +93,6 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
             }
         });
 
-
         tvStart = (TextView) findViewById(R.id.tvStart);
         tvStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,18 +103,11 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
             }
         });
 
-
-
-
-
         tvAnswerTitle = (TextView) findViewById(R.id.tvAnswerTitle);
         tvAnswerCorrect = (TextView) findViewById(R.id.tvAnswerCorrect);
         tvAnswerWrong = (TextView) findViewById(R.id.tvAnswerWrong);
 
         checkAnswer();
-
-
-
     }
 
     private void checkAnswer(){
@@ -168,7 +147,9 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
             currentPage = b.getInt(CURRENT_PAGE);
             currentPage++;
         }
-        answers = SharedPreferenceUtil.getListAnswers(context);
+        totalQuestions = SharedPreferenceUtil.getTotalQuestions(context);
+        answers = new Answer[totalQuestions];
+        answers = (SharedPreferenceUtil.getListAnswers(context)).toArray(answers);
 
     }
 
@@ -204,7 +185,6 @@ public class AnswerActivity extends AppCompatActivity implements SwipeRefreshLay
 
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void onRefresh() {

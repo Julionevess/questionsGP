@@ -41,13 +41,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     public static Context context;
 
-    public static int totalQuestionSelected = 10;
-    public static List<Answer> answers;
+    public static int totalQuestionSelected = 7;
     public static List<Question> questionsSelected;
     public static List<Question> questionsAll;
     public static List<Question> questionsByCategory;
     public static String Category;
 
+
+    private void init() {
+        context = this;
+        SharedPreferenceUtil.setTotalQuestions(context, totalQuestionSelected);
+    }
 
     /*
      * Catch all json questions
@@ -94,7 +98,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         }
         SharedPreferenceUtil.setListQuestion(context, questionsSelected);
-
     }
 
     @Override
@@ -103,8 +106,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        context = this;
-
+        init();
         CardView cardIntegration = (CardView) findViewById(R.id.cardIntegration);
         CardView cardScope = (CardView) findViewById(R.id.cardScope);
         CardView cardAllSubject = (CardView) findViewById(R.id.cardAllSubject);
@@ -130,10 +132,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         cardSchedule.setOnClickListener(this);
         cardQuality.setOnClickListener(this);
         cardStackholders.setOnClickListener(this);
-
-
     }
-
 
     @Override
     public void onClick(View v) {
@@ -141,7 +140,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             catchSelectedQuestionsByCategory(CATEGORY_INTEGRATION);
             SharedPreferenceUtil.getListQuestion(context);
             final Intent intent = new Intent(context, QuestionsActivity.class);
-            intent.putExtra("totalQuestions", 4);//TODO passar aqui a quantidade desejada de questoes
+            intent.putExtra("totalQuestions", totalQuestionSelected);//TODO passar aqui a quantidade desejada de questoes
             startActivity(intent);
         } else if (v.getId() == R.id.cardScope) {
 //            catchSelectedQuestionsByCategory(CATEGORY_SCOPE);
@@ -177,13 +176,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //            catchSelectedQuestionsByCategory(CATEGORY_ALL_SUBJECT);
             showSnackMessage(R.string.msg_category_is_empty);
         }
-
-
-
-
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
