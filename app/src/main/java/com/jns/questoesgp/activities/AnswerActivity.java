@@ -6,9 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,12 +18,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.jns.questoesgp.adapter.AnswerAdapter;
 import com.jns.questoesgp.adapter.AppsAdapter;
@@ -32,6 +34,7 @@ import com.jns.questoesgp.util.SharedPreferenceUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class AnswerActivity extends AppCompatActivity {
@@ -76,7 +79,7 @@ public class AnswerActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View v) {
 
-				final File file = exportAnswerViews();
+				final File file = createPdf(answers);
 				composeEmail(file);
 			}
 		});
@@ -169,48 +172,79 @@ public class AnswerActivity extends AppCompatActivity {
 		dialog.show();
 	}
 
-	private File exportAnswerViews() {
-		LinearLayout content = (LinearLayout) findViewById(R.id.layout_answers_printout);
+	private File createPdf(List<Answer> answers) {
 
-		String APP_FOLDER = Environment.getExternalStorageDirectory().toString() + "/" + getString(R.string.app_name);
-		new File(APP_FOLDER).mkdirs();
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		AnswerActivity.this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		int height = displaymetrics.heightPixels;
+		int width = displaymetrics.widthPixels;
 
-		String fileAnswerName = "answerGP.png";
+		String appFolder = Environment.getExternalStorageDirectory().toString() + "/" + getString(R.string.app_name);
+		new File(appFolder).mkdirs();
 
-		File file = new File(APP_FOLDER + "/" + fileAnswerName);
-
+		File file = null;
 		try {
+			file = new File(appFolder, "sample.pdf");
 			file.createNewFile();
+			FileOutputStream fOut = new FileOutputStream(file);
 
-			final Bitmap bitmap = getBitmapFromView(content);
-			FileOutputStream ostream = new FileOutputStream(file);
-			bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
-			ostream.flush();
-			ostream.close();
+			PdfDocument document = new PdfDocument();
+			PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(width, height, 1).create();
+			PdfDocument.Page page = document.startPage(pageInfo);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			Log.i("TAG", "There was an issue saving the image.");
+			Canvas canvas = page.getCanvas();
+
+			writeOnDocument(answers, canvas);
+
+			document.finishPage(page);
+			document.writeTo(fOut);
+			document.close();
+
+		} catch (IOException e) {
+			Log.i("error", e.getLocalizedMessage());
 		}
 
 		return file;
 	}
 
-	private Bitmap getBitmapFromView(View view) {
-		Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-		//Bind a canvas to it
-		Canvas canvas = new Canvas(returnedBitmap);
-		//Get the view's background
-		Drawable bgDrawable = view.getBackground();
-		if (bgDrawable != null) {
-			//has background drawable, then draw it on the canvas
-			bgDrawable.draw(canvas);
-		}
+	private void writeOnDocument(List<Answer> answers, Canvas canvas) {
+		Paint pQuestion = new Paint();
+		pQuestion.setTextSize(52f);
+		pQuestion.setTypeface(Typeface.DEFAULT_BOLD);
 
-		// draw the view on the canvas
-		view.draw(canvas);
-		//return the bitmap
-		return returnedBitmap;
+		Paint pAnswer = new Paint();
+		pAnswer.setTextSize(48f);
+
+		//Adding space and title for the page
+		Paint pTitle = new Paint();
+		pTitle.setTypeface(Typeface.DEFAULT_BOLD);
+		pTitle.setTextSize(65);
+		canvas.drawText("Resultado", 500, 100, pTitle);
+
+		int startMarginPage = 50;
+		int lineHeight = 200;
+		for (int i = 0; i < answers.size(); i++) {
+			final Answer answer = answers.get(i);
+
+			//Question //TODO add logic here to breaklines for Long Titles.
+			canvas.drawText(answer.getQuestion(), startMarginPage, lineHeight, pQuestion);
+
+			//Correct answer
+			lineHeight += 60;
+			pAnswer.setColor(Color.GREEN);
+			canvas.drawText(answer.getCorrectAnswer(), startMarginPage, lineHeight, pAnswer);
+
+			//Wrong answer
+			if (!answer.getAnswer().equals(answer.getCorrectAnswer())) {
+				lineHeight += startMarginPage;
+				pAnswer.setColor(Color.RED);
+				canvas.drawText(answer.getAnswer(), startMarginPage, lineHeight, pAnswer);
+			}
+
+			//Separator
+			canvas.drawText("", startMarginPage, lineHeight, pQuestion);
+			lineHeight += 100;
+		}
 	}
 
 	@Override

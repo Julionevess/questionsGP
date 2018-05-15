@@ -12,24 +12,24 @@ import java.util.Random;
 
 public class Util {
 
-    public static List<String> unsortedList(Question question) {
-        List<String> options = new ArrayList<>();
+	public static List<String> unsortedList(Question question) {
+		List<String> options = new ArrayList<>();
 
-        options.add(question.getAnswer());
-        options.add(question.getOptionOne());
-        options.add(question.getOptionTwo());
-        options.add(question.getOptionThree());
-        options.add(question.getOptionFour());
+		options.add(question.getAnswer());
+		options.add(question.getOptionOne());
+		options.add(question.getOptionTwo());
+		options.add(question.getOptionThree());
+		options.add(question.getOptionFour());
 
-        Random r = new Random();
+		Random r = new Random();
 
-        int position;
-        List<String> optionsUnsorted = new ArrayList<String>();
-        for (int i = options.size(); i > 0; i--) {
-            position = r.nextInt(options.size());
-            optionsUnsorted.add(options.get(position));
-            options.remove(position);
-        }
-        return optionsUnsorted;
-    }
+		int position;
+		List<String> optionsUnsorted = new ArrayList<String>();
+		for (int i = options.size(); i > 0; i--) {
+			position = r.nextInt(options.size());
+			optionsUnsorted.add(options.get(position));
+			options.remove(position);
+		}
+		return optionsUnsorted;
+	}
 }
