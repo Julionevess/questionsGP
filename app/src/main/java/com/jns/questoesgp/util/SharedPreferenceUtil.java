@@ -17,6 +17,7 @@ public class SharedPreferenceUtil {
     public static final String MyPREFERENCES = "MyPrefs";
     public static final String LIST_QUESTIONS = "listQuestion";
     public static final String LIST_ANSWERS = "listAnswers";
+    public static final String TOTAL_QUESTIONS = "totalQuestions";
 
     public static List<Question> getListQuestion(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -50,6 +51,18 @@ public class SharedPreferenceUtil {
         String json = prefs.getString(LIST_ANSWERS, null);
         Type listType = new TypeToken<ArrayList<Answer>>(){}.getType();
         return gson.fromJson(json, listType);
+    }
+
+    public static void setTotalQuestions(Context context, int totalQuestion){
+        SharedPreferences.Editor editor = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE).edit();
+        editor.putInt(TOTAL_QUESTIONS, totalQuestion);
+        editor.commit();
+    }
+
+    public static Integer getTotalQuestions(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        Integer totalQuestions = prefs.getInt(TOTAL_QUESTIONS, 0);
+        return totalQuestions;
     }
 
 }

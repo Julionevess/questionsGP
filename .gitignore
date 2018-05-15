@@ -28,6 +28,7 @@ proguard-project.txt
 *.ipr
 *.iws
 .idea/
+.idea/*
  
 *.pydevproject
 .project
@@ -58,3 +59,15 @@ local.properties
 # PDT-specific
 .buildpath
 gradle-wrapper.properties
+
+app/*.apk
+agora-android.iml
+compiler.xml
+profiles_settings.xml
+encodings.xml
+misc.xml
+modules.xml
+vcs.xml
+workspace.xml
+*.aar
+
