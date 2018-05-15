@@ -1,5 +1,6 @@
 package com.jns.questoesgp.activities;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +15,8 @@ import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.jns.questoesgp.adapter.AnswerAdapter;
 import com.jns.questoesgp.adapter.AppsAdapter;
 import com.jns.questoesgp.model.Answer;
@@ -40,6 +44,7 @@ import java.util.List;
 public class AnswerActivity extends AppCompatActivity {
 
 	private static final String IMAGE_CONTENT_TYPE = "image/png";
+	private static int REQUEST_PERMISSIONS = 1;
 
 	public static final String CURRENT_PAGE = "currentPage";
 	private static final String CORRECT = "Certo";
@@ -56,6 +61,8 @@ public class AnswerActivity extends AppCompatActivity {
 
 	private int countCorrect;
 	private int countWrong;
+
+	private boolean hasPermissionAllowed;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +86,12 @@ public class AnswerActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View v) {
 
-				final File file = createPdf(answers);
-				composeEmail(file);
+				if (hasPermissionAllowed) {
+					final File file = createPdf(answers);
+					composeEmail(file);
+				} else {
+					checkPermission();
+				}
 			}
 		});
 
@@ -184,7 +195,7 @@ public class AnswerActivity extends AppCompatActivity {
 
 		File file = null;
 		try {
-			file = new File(appFolder, "sample.pdf");
+			file = new File(appFolder, "resultado.pdf");
 			file.createNewFile();
 			FileOutputStream fOut = new FileOutputStream(file);
 
@@ -267,5 +278,43 @@ public class AnswerActivity extends AppCompatActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void checkPermission() {
+		if ((ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) ||
+				(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+
+			if ((ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE))) {
+			} else {
+				ActivityCompat.requestPermissions(this, new String[] { android.Manifest.permission.READ_EXTERNAL_STORAGE },
+						REQUEST_PERMISSIONS);
+
+			}
+
+			if ((ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
+			} else {
+				ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+						REQUEST_PERMISSIONS);
+
+			}
+		} else {
+			hasPermissionAllowed = true;
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		if (requestCode == REQUEST_PERMISSIONS) {
+
+			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+				hasPermissionAllowed = true;
+
+			} else {
+				Toast.makeText(getApplicationContext(), "Please allow the permission", Toast.LENGTH_LONG).show();
+
+			}
+		}
 	}
 }
