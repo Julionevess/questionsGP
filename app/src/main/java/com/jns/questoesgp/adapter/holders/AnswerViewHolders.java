@@ -16,7 +16,6 @@ import com.jns.questoesgp.questoesgp.R;
 
 public class AnswerViewHolders extends RecyclerView.ViewHolder {
 
-    public ImageView customerImage;
     public TextView answer;
     public TextView correctAnswer;
     public TextView question;
@@ -44,7 +43,6 @@ public class AnswerViewHolders extends RecyclerView.ViewHolder {
             }
 		});
 
-        customerImage = (ImageView) itemView.findViewById(R.id.iv_customer);
         answer = (TextView) itemView.findViewById(R.id.tv_answer);
         correctAnswer = (TextView) itemView.findViewById(R.id.tv_correct_answer);
         question = (TextView) itemView.findViewById(R.id.tv_question);
