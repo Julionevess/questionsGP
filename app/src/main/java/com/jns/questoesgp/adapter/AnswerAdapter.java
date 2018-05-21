@@ -7,18 +7,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jns.questoesgp.adapter.holders.AnswerViewHolders;
 import com.jns.questoesgp.model.Answer;
 import com.jns.questoesgp.questoesgp.R;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AnswerAdapter extends RecyclerView.Adapter<AnswerViewHolders> {
 
     private Activity activity;
     private List<Answer> items;
-    private RoundedBitmapDrawable circularBitmapDrawable;
+    private Map<String, TextView> questionsView = new HashMap<>();
 
     public AnswerAdapter(Activity activity) {
         this.activity = activity;
@@ -74,7 +77,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerViewHolders> {
             holder.tv_numberQuestion.setVisibility(View.GONE);
         }
 
-
+        questionsView.put(holderItem.getQuestion(), holder.question);
     }
 
     @Override
@@ -88,5 +91,9 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerViewHolders> {
 
     public void setItems(List<Answer> items) {
         this.items = items;
+    }
+
+    public TextView getQuestionView(String text) {
+        return questionsView.get(text);
     }
 }

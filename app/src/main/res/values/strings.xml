@@ -7,4 +7,7 @@
     <string name="question_number">Questão %s</string>
     <string name="previous_button">Anterior</string>
     <string name="next_button">Próximo</string>
+
+    <string name="correct_answer">Correta: %s</string>
+    <string name="wrong_answer">Errada: %s</string>
 </resources>

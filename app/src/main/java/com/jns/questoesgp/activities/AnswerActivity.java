@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.jns.questoesgp.adapter.AnswerAdapter;
 import com.jns.questoesgp.adapter.AppsAdapter;
 import com.jns.questoesgp.model.Answer;
@@ -43,278 +44,191 @@ import java.util.List;
 
 public class AnswerActivity extends AppCompatActivity {
 
-	private static final String IMAGE_CONTENT_TYPE = "image/png";
-	private static int REQUEST_PERMISSIONS = 1;
+    private static final String IMAGE_CONTENT_TYPE = "image/png";
 
-	public static final String CURRENT_PAGE = "currentPage";
-	private static final String CORRECT = "Certo";
-	private static final String WRONG = "Errado";
+    public static final String CURRENT_PAGE = "currentPage";
+    private static final String CORRECT = "Certo";
+    private static final String WRONG = "Errado";
 
-	private TextView tvAnswerCorrect;
-	private TextView tvAnswerWrong;
+    private TextView tvAnswerCorrect;
+    private TextView tvAnswerWrong;
 
-	public static List<Answer> answers;
-	public static List<Question> questions;
-	public static Context context;
-	public static int currentPage;
-	public Answer answer;
+    public static List<Answer> answers;
+    public static List<Question> questions;
+    public static Context context;
+    public static int currentPage;
+    public Answer answer;
 
-	private int countCorrect;
-	private int countWrong;
+    private int countCorrect;
+    private int countWrong;
 
-	private boolean hasPermissionAllowed;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_answer);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_answer);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
+        init();
 
-		init();
+        AnswerAdapter adapter = new AnswerAdapter(this);
+        adapter.setItems(answers);
 
-		AnswerAdapter adapter = new AnswerAdapter(this);
-		adapter.setItems(answers);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.swapAdapter(adapter, true);
 
-		RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-		recyclerView.setHasFixedSize(true);
-		recyclerView.setLayoutManager(new LinearLayoutManager(context));
-		recyclerView.swapAdapter(adapter, true);
+        Button btnSendEmail = (Button) findViewById(R.id.btnSendEmail);
+        btnSendEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                composeEmail(answers);
+            }
+        });
 
-		Button btnSendEmail = (Button) findViewById(R.id.btnSendEmail);
-		btnSendEmail.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
+        TextView tvStart = (TextView) findViewById(R.id.tvStart);
+        tvStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
 
-				if (hasPermissionAllowed) {
-					final File file = createPdf(answers);
-					composeEmail(file);
-				} else {
-					checkPermission();
-				}
-			}
-		});
+        tvAnswerCorrect = (TextView) findViewById(R.id.tvAnswerCorrect);
+        tvAnswerWrong = (TextView) findViewById(R.id.tvAnswerWrong);
 
-		TextView tvStart = (TextView) findViewById(R.id.tvStart);
-		tvStart.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
-			}
-		});
+        checkAnswer();
 
-		tvAnswerCorrect = (TextView) findViewById(R.id.tvAnswerCorrect);
-		tvAnswerWrong = (TextView) findViewById(R.id.tvAnswerWrong);
+    }
 
-		checkAnswer();
+    private void checkAnswer() {
+        countCorrect = 0;
+        countWrong = 0;
 
-	}
+        for (Answer answer : answers) {
+            if (answer.getAnswer().equals(answer.getCorrectAnswer())) {
+                countCorrect++;
+            } else {
+                countWrong++;
+            }
+        }
 
-	private void checkAnswer() {
-		countCorrect = 0;
-		countWrong = 0;
+        if (countCorrect == 0) {
+            tvAnswerCorrect.setText("Você não acertou nenhuma questão");
+        } else if (countCorrect == 1) {
+            tvAnswerCorrect.setText("Você acertou " + countCorrect + " questão");
+        } else {
+            tvAnswerCorrect.setText("Você acertou " + countCorrect + " questões");
+        }
+        if (countWrong == 0) {
+            tvAnswerWrong.setText("Você não errou nenhuma questão");
+        } else if (countWrong == 1) {
+            tvAnswerWrong.setText("Você errou " + countWrong + " questão");
+        } else {
+            tvAnswerWrong.setText("Você errou " + countWrong + " questões");
+        }
+    }
 
-		for (Answer answer : answers) {
-			if (answer.getAnswer().equals(answer.getCorrectAnswer())) {
-				countCorrect++;
-			} else {
-				countWrong++;
-			}
-		}
+    private void init() {
 
-		if (countCorrect == 0) {
-			tvAnswerCorrect.setText("Você não acertou nenhuma questão");
-		} else if (countCorrect == 1) {
-			tvAnswerCorrect.setText("Você acertou " + countCorrect + " questão");
-		} else {
-			tvAnswerCorrect.setText("Você acertou " + countCorrect + " questões");
-		}
-		if (countWrong == 0) {
-			tvAnswerWrong.setText("Você não errou nenhuma questão");
-		} else if (countWrong == 1) {
-			tvAnswerWrong.setText("Você errou " + countWrong + " questão");
-		} else {
-			tvAnswerWrong.setText("Você errou " + countWrong + " questões");
-		}
-	}
+        context = this;
+        Bundle b = getIntent().getExtras();
+        currentPage = -1;
+        if (b != null) {
+            currentPage = b.getInt(CURRENT_PAGE);
+            currentPage++;
+        }
+        answers = SharedPreferenceUtil.getListAnswers(context);
 
-	private void init() {
+    }
 
-		context = this;
-		Bundle b = getIntent().getExtras();
-		currentPage = -1;
-		if (b != null) {
-			currentPage = b.getInt(CURRENT_PAGE);
-			currentPage++;
-		}
-		answers = SharedPreferenceUtil.getListAnswers(context);
+    private void composeEmail(List<Answer> answers) {
 
-	}
+        final String emailBody = emailBody(answers);
 
-	private void composeEmail(final File file) {
+        final Intent queryIntent = new Intent(Intent.ACTION_SENDTO);
+        queryIntent.setData(Uri.parse("mailto:"));
 
-		final Intent queryIntent = new Intent(Intent.ACTION_SENDTO);
-		queryIntent.setData(Uri.parse("mailto:"));
+        final PackageManager pm = getPackageManager();
+        final List<ResolveInfo> resolveInfoList = pm.queryIntentActivities(queryIntent, 0);
 
-		final PackageManager pm = getPackageManager();
-		final List<ResolveInfo> resolveInfoList = pm.queryIntentActivities(queryIntent, 0);
+        AppsAdapter adapter = new AppsAdapter(this, resolveInfoList);
 
-		AppsAdapter adapter = new AppsAdapter(this, resolveInfoList);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final ResolveInfo resolveInfo = resolveInfoList.get(which);
 
-		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				final ResolveInfo resolveInfo = resolveInfoList.get(which);
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, emailBody);
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                shareIntent.setPackage(resolveInfo.activityInfo.packageName);
+                startActivity(shareIntent);
+            }
+        });
 
-				Intent shareIntent = new Intent(Intent.ACTION_SEND);
-				shareIntent.setType(IMAGE_CONTENT_TYPE);
-				shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-				shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-				shareIntent.setPackage(resolveInfo.activityInfo.packageName);
-				startActivity(shareIntent);//Aqui se quiser fazer o handle se o usuario cancelou, utilizar startActivityForResult
-			}
-		});
+        final AlertDialog dialog = builder.create();
+        dialog.setTitle("Compartilhamento...");
+        dialog.show();
+    }
 
-		final AlertDialog dialog = builder.create();
-		dialog.setTitle("Compartilhamento...");
-		dialog.show();
-	}
+    private String emailBody(List<Answer> answers) {
 
-	private File createPdf(List<Answer> answers) {
+        StringBuilder sb = new StringBuilder();
 
-		DisplayMetrics displaymetrics = new DisplayMetrics();
-		AnswerActivity.this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-		int height = displaymetrics.heightPixels;
-		int width = displaymetrics.widthPixels;
+        for (int i = 0; i < answers.size(); i++) {
 
-		String appFolder = Environment.getExternalStorageDirectory().toString() + "/" + getString(R.string.app_name);
-		new File(appFolder).mkdirs();
+            Answer answer = answers.get(i);
 
-		File file = null;
-		try {
-			file = new File(appFolder, "resultado.pdf");
-			file.createNewFile();
-			FileOutputStream fOut = new FileOutputStream(file);
+            String questionNumber = getString(R.string.question_number, String.valueOf(i + 1));
+            sb.append(questionNumber);
+            sb.append("\n");
 
-			PdfDocument document = new PdfDocument();
-			PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(width, height, 1).create();
-			PdfDocument.Page page = document.startPage(pageInfo);
+            String question = answer.getQuestion();
+            if (question != null) {
+                sb.append(question);
+                sb.append("\n");
+            }
 
-			Canvas canvas = page.getCanvas();
+            if (answer.getAnswer() != null && !answer.getAnswer().equals(answer.getCorrectAnswer())) {
+                String wrongAnswer = getString(R.string.wrong_answer, answer.getAnswer());
+                sb.append(wrongAnswer);
+                sb.append("\n");
+            }
 
-			writeOnDocument(answers, canvas);
+            String correctAnswer = getString(R.string.correct_answer, answer.getCorrectAnswer());
+            sb.append(correctAnswer);
+            sb.append("\n\n");
+        }
 
-			document.finishPage(page);
-			document.writeTo(fOut);
-			document.close();
+        return sb.toString();
+    }
 
-		} catch (IOException e) {
-			Log.i("error", e.getLocalizedMessage());
-		}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
-		return file;
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-	private void writeOnDocument(List<Answer> answers, Canvas canvas) {
-		Paint pQuestion = new Paint();
-		pQuestion.setTextSize(52f);
-		pQuestion.setTypeface(Typeface.DEFAULT_BOLD);
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
 
-		Paint pAnswer = new Paint();
-		pAnswer.setTextSize(48f);
+        return super.onOptionsItemSelected(item);
+    }
 
-		//Adding space and title for the page
-		Paint pTitle = new Paint();
-		pTitle.setTypeface(Typeface.DEFAULT_BOLD);
-		pTitle.setTextSize(65);
-		canvas.drawText("Resultado", 500, 100, pTitle);
-
-		int startMarginPage = 50;
-		int lineHeight = 200;
-		for (int i = 0; i < answers.size(); i++) {
-			final Answer answer = answers.get(i);
-
-			//Question //TODO add logic here to breaklines for Long Titles.
-			canvas.drawText(answer.getQuestion(), startMarginPage, lineHeight, pQuestion);
-
-			//Correct answer
-			lineHeight += 60;
-			pAnswer.setColor(Color.GREEN);
-			canvas.drawText(answer.getCorrectAnswer(), startMarginPage, lineHeight, pAnswer);
-
-			//Wrong answer
-			if (!answer.getAnswer().equals(answer.getCorrectAnswer())) {
-				lineHeight += startMarginPage;
-				pAnswer.setColor(Color.RED);
-				canvas.drawText(answer.getAnswer(), startMarginPage, lineHeight, pAnswer);
-			}
-
-			//Separator
-			canvas.drawText("", startMarginPage, lineHeight, pQuestion);
-			lineHeight += 100;
-		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//        getMenuInflater().inflate(R.menu.menu_main, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-
-		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_settings) {
-			return true;
-		}
-
-		return super.onOptionsItemSelected(item);
-	}
-
-	private void checkPermission() {
-		if ((ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) ||
-				(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
-
-			if ((ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE))) {
-			} else {
-				ActivityCompat.requestPermissions(this, new String[] { android.Manifest.permission.READ_EXTERNAL_STORAGE },
-						REQUEST_PERMISSIONS);
-
-			}
-
-			if ((ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
-			} else {
-				ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-						REQUEST_PERMISSIONS);
-
-			}
-		} else {
-			hasPermissionAllowed = true;
-		}
-	}
-
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		if (requestCode == REQUEST_PERMISSIONS) {
-
-			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-				hasPermissionAllowed = true;
-
-			} else {
-				Toast.makeText(getApplicationContext(), "Please allow the permission", Toast.LENGTH_LONG).show();
-
-			}
-		}
-	}
 }
